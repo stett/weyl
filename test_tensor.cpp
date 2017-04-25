@@ -49,9 +49,37 @@ TEST_CASE("Correct tensor summations are callable", "[tensor]") {
     t2.sum<2, 1>(t1);
 }
 
+TEST_CASE("Tensor comparison", "[tensor]") {
+    tensor<float, 2, 3> t1({ { 1.0f, 2.0f, 3.0f }, { 4.0f, 5.0f, 6.0f } });
+    tensor<float, 2, 3> t2({ { 1.0f, 2.0f, 3.0f }, { 4.0f, 5.0f, 6.0f } });
+    tensor<float, 2, 3> t3({ { 1.0f, 2.0f, 3.0f }, { 4.0f, 5.0f, 0.0f } });
+    tensor<float, 3, 2> t4({ { 1.0f, 2.0f }, { 3.0f, 4.0f }, { 5.0f, 6.0f } });
+    REQUIRE(t1 == t2);
+    REQUIRE(t1 != t3);
+    REQUIRE(t1 != t4);
+    REQUIRE(!(t1 != t2));
+    REQUIRE(!(t1 == t3));
+    REQUIRE(!(t1 == t4));
+}
+
 TEST_CASE("Single index tensor summation", "[tensor]") {
     using T = tensor<float, 3>;
     T t1(1.0f, 2.0f, 3.0f);
     T t2(2.0f, 3.0f, 4.0f);
     //REQUIRE(t1.sum<0, 0>(t2) == (1.0f * 2.0f) + (2.0f * 3.0f) + (3.0f * 4.0f));
+}
+
+TEST_CASE("Multiple index tensor summation", "[tensor]") {
+    tensor<float, 2, 3, 2> t1({
+        { { 1.0f, 2.0f }, { 2.0f, 3.0f }, { 3.0f, 4.0f } },
+        { { 4.0f, 5.0f }, { 5.0f, 6.0f }, { 6.0f, 7.0f } }
+    });
+
+    tensor<float, 3, 2, 2> t2({
+        { { 1.0f, 2.0f }, { 2.0f, 3.0f } },
+        { { 2.0f, 3.0f }, { 3.0f, 4.0f } },
+        { { 3.0f, 4.0f }, { 4.0f, 5.0f } }
+    });
+
+    //REQUIRE(t1.sum<>);
 }

@@ -71,6 +71,31 @@ namespace weyl
             return data[i];
         }
 
+        template <typename OtherT>
+        bool operator==(const OtherT& other) const {
+            return false;
+        }
+
+        bool operator==(const tensor<T, N0, N...>& other) const {
+            //
+            // TODO: Expand this loop statically...
+            //
+            bool result = true;
+            for (size_t i = 0; i < N0; ++i)
+                if (data[i] != other.data[i])
+                    return false;
+            return true;
+        }
+
+        template <typename OtherT>
+        bool operator!=(const OtherT& other) const {
+            return true;
+        }
+
+        bool operator!=(const tensor<T, N0, N...>& other) const {
+            return !operator==(other);
+        }
+
     private:
         tensor<T, N...> data[N0];
     };
@@ -130,6 +155,30 @@ namespace weyl
 
         const T& operator[](size_t i) const {
             return data[i];
+        }
+
+        template <typename OtherT>
+        bool operator==(const OtherT& other) const {
+            return false;
+        }
+
+        bool operator==(const tensor<T, N>& other) const {
+            //
+            // TODO: Expand this loop statically...
+            //
+            for (size_t i = 0; i < N; ++i)
+                if (data[i] != other.data[i])
+                    return false;
+            return true;
+        }
+
+        template <typename OtherT>
+        bool operator!=(const OtherT& other) const {
+            return true;
+        }
+
+        bool operator!=(const tensor<T, N>& other) const {
+            return !operator==(other);
         }
 
     private:
