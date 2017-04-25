@@ -32,6 +32,17 @@ TEST_CASE("Single-index tensor variadic constructor", "[tensor]") {
     REQUIRE(t[2] == 3.0f);
 }
 
+TEST_CASE("Copy constructor", "[tensor]") {
+    tensor<float, 2, 3> t1({ { 1.0f, 2.0f, 3.0f }, { 4.0f, 5.0f, 6.0f } });
+    tensor<float, 2, 3> t2(t1);
+    REQUIRE(t2[0][0] == 1.0f);
+    REQUIRE(t2[0][1] == 2.0f);
+    REQUIRE(t2[0][2] == 3.0f);
+    REQUIRE(t2[1][0] == 4.0f);
+    REQUIRE(t2[1][1] == 5.0f);
+    REQUIRE(t2[1][2] == 6.0f);
+}
+
 TEST_CASE("Tensor dimensionality", "[tensor]") {
     using T = tensor<float, 2, 3, 1>;
     REQUIRE(T::dimensions::count == 3);

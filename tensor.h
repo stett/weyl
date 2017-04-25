@@ -54,6 +54,10 @@ namespace weyl
             std::copy(values.begin(), values.end(), data);
         }
 
+        tensor(const tensor<T, N0, N...>& other) {
+            std::copy(other.data, other.data + N0, data);
+        }
+
         /// \brief Produce a tensor product by summing up dimension I
         /// of this tensor with dimension J of the other.
         template <size_t I, size_t J, size_t M0, size_t... M>
@@ -127,6 +131,10 @@ namespace weyl
 
         template <typename... Args>
         tensor(Args... args) : data{ args... } {}
+
+        tensor(const tensor<T, N>& other) {
+            std::copy(other.data, other.data + N, data);
+        }
 
         /*
         /// \brief Produce a tensor product by summing up dimension I
