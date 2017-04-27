@@ -91,6 +91,5 @@ TEST_CASE("Multiple index tensor summation", "[tensor]") {
         { { 2.0f, 3.0f }, { 3.0f, 4.0f } },
         { { 3.0f, 4.0f }, { 4.0f, 5.0f } }
     });
-
     //REQUIRE(t1.sum<>);
 }
