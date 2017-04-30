@@ -77,7 +77,9 @@ TEST_CASE("Single index tensor summation", "[tensor]") {
     using T = tensor<float, 3>;
     T t1(1.0f, 2.0f, 3.0f);
     T t2(2.0f, 3.0f, 4.0f);
-    //REQUIRE(t1.sum<0, 0>(t2) == (1.0f * 2.0f) + (2.0f * 3.0f) + (3.0f * 4.0f));
+    float sum = t1.sum<0, 0>(t2);
+    float expected_sum = (1.0f * 2.0f) + (2.0f * 3.0f) + (3.0f * 4.0f);
+    REQUIRE(sum == expected_sum);
 }
 
 TEST_CASE("Multiple index tensor summation", "[tensor]") {

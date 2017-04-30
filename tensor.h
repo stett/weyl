@@ -157,6 +157,20 @@ namespace weyl
         }
         */
 
+        template <size_t I, size_t J>
+        T sum(const tensor<T, N>& other) {
+            assert(I == 0);
+            assert(J == 0);
+            return sum(other);
+        }
+
+        T sum(const tensor<T, N>& other) {
+            T total = data[0] * other.data[0];
+            for (size_t i = 1; i < N; ++i)
+                total += data[i] * other.data[i];
+            return total;
+        }
+
         T& operator[](size_t i) {
             return data[i];
         }
