@@ -36,7 +36,7 @@ or
     tensor<float, 3, 3> b({ { ... }, { ... }, { ... } });
     tensor<float>::sum<1, 0>(a, b);
 
-In this case, sum should expand to something equivalent to the following.
+In this case, `sum` should expand to something equivalent to the following.
 
     tensor<float, 3, 3> value(0.0f);
     for (size_t n = 0; n < 3; ++n) // 1st dimension of a (2nd skipped - it is in the sum)
