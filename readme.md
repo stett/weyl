@@ -1,11 +1,11 @@
-[Weyl](https://en.wikipedia.org/wiki/Weyl)
-====
+# [Weyl](https://en.wikipedia.org/wiki/Weyl)
 
 Weyl is a library for doing non-sparse math with tensors of any finite dimensionality.
 
 
-Development Notes
------------------
+## Development Notes
+
+### Example 1
 
 The sum across the only index of two single-index tensors, if the indexes are 3-dimensional, is the same as the dot product of two 3-dimensional vectors.
 
@@ -23,6 +23,8 @@ The `sum` function ought to expand to the following.
     for (size_t i = 0; i < 3; ++i)
         value += abc[i] * def[i];
     return value;
+
+### Example 2
 
 The sum across the second index of a 3x3 tensor with the first index of another 3x3 tensor is essentially a matrix product.
 
