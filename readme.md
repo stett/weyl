@@ -50,9 +50,11 @@ or, more generally
 
     size_t a_dim = a.dimension<0>::value;
     size_t b_dim = b.dimension<1>::value;
-    size_t sum_dim = a.dimension<1>::value; // must be equivalent to b.dimension<0>::value, since we're summing over indexes 1 and 0 of a and b respectively.
+    size_t sum_dim = a.dimension<1>::value; // must be equivalent to b.dimension<0>::value (since we're summing over indexes 1 and 0 of a and b respectively)
     tensor<float, a_dim, b_dim> value(0.0f);
     for (size_t n = 0; n < a_dim; ++n) // 1st dimension of a (2nd skipped - it is in the sum)
     for (size_t m = 0; m < b_dim; ++m) // 2nd dimension of b (1st skipped - it is in the sum)
     for (size_t i = 0; i < sum_dim; ++i) // index for the 2nd and 1st dimensions of a and b respectively
         value[n][m] += a[n][i] * b[i][m];
+
+From this point we can start to see patterns and hopefully think of ways to design the `sum` template so that it expands in the manner described above.
