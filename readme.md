@@ -4,8 +4,8 @@
 Weyl is a library for doing non-sparse math with tensors of any finite dimensionality.
 
 
-Developmental Notes
--------------------
+Development Notes
+-----------------
 
 The sum across the only index of two single-index tensors, if the indexes are 3-dimensional, is the same as the dot product of two 3-dimensional vectors.
 
