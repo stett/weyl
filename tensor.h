@@ -40,19 +40,30 @@ namespace weyl
         };
 
         /// \struct Reduction
-        /// \brief Given a set of dimensions N through M, remove the Ith one and house a tensor of the resulting dimensionality.
-        template <size_t I, typename T, size_t... N>
+        /// \brief Given a set of dimensions N through M, remove the Ith one, and house a tensor of the resulting dimensionality.
+        template <size_t I, size_t J, typename T, size_t... N>
         struct Reduction
+        {
+            //static_assert(I < J, "The lower index must come first in a double index reduction");
+            template <size_t NM, size_t... M>
+            struct Post
+            {
+                using reduced_tensor_t = typename Reduction<I-1, J, T, N..., NM>::template Post<M...>::reduced_tensor_t;
+            };
+        };
+
+        template <size_t J, typename T, size_t... N>
+        struct Reduction<0, J, T, N...>
         {
             template <size_t NM, size_t... M>
             struct Post
             {
-                using reduced_tensor_t = typename Reduction<0, T, N..., NM>::template Post<M...>::reduced_tensor_t;
+                using reduced_tensor_t = typename Reduction<0, J-1, T, N..., NM>::template Post<M...>::reduced_tensor_t;
             };
         };
 
         template <typename T, size_t... N>
-        struct Reduction<0, T, N...>
+        struct Reduction<0, 0, T, N...>
         {
             template <size_t NM, size_t... M>
             struct Post
@@ -60,6 +71,21 @@ namespace weyl
                 using reduced_tensor_t = tensor<T, N..., M...>;
             };
         };
+
+        /*
+        /// \struct Sum
+        /// \brief 
+        template <size_t I, size_t J, typename T, size_t... N>
+        struct Sum
+        {
+            template <size_t... M>
+            struct Operand
+            {
+                constexpr size_t OffsetJ = Dimensions<N...>::count + J;
+                using result_t = Reduction<>
+            };
+        };
+        */
     }
 
     template <typename T, size_t N0, size_t... N>
@@ -97,8 +123,6 @@ namespace weyl
             static_assert(
                 (int)dimension<I>::value == (int)detail::Dimension<J, M0, M...>::value,
                 "Indexes over which to sum must have equal dimensionality between tensors.");
-
-            
 
             //return detail::Sum<T, I, J, N0, N0, M0, M0>::ResultT();
             return tensor<T, 2, 2>();
