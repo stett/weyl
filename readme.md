@@ -5,7 +5,9 @@ Weyl is a library for doing non-sparse math with tensors of any finite dimension
 
 ## Development Notes
 
-### Example 1
+### Examples: Inner Products
+
+#### Example 1
 
 The sum across the only index of two single-index tensors, if the indexes are 3-dimensional, is the same as the dot product of two 3-dimensional vectors.
 
@@ -24,7 +26,7 @@ The `sum` function ought to expand to the following.
         value += abc[i] * def[i];
     return value;
 
-### Example 2
+#### Example 2
 
 The sum across the second index of a 3x3 tensor with the first index of another 3x3 tensor is essentially a matrix product.
 
@@ -58,3 +60,32 @@ or, more generally
         value[n][m] += a[n][i] * b[i][m];
 
 From this point we can start to see patterns and hopefully think of ways to design the `sum` template so that it expands in the manner described above.
+
+#### Example 3
+
+By extension of the previous examples, we can "unroll" a higher dimensional tensor product. For example, the product of the second and first indexes respectively of the following tensors of dimensionality 2x2x2 and 3, is as follows.
+
+        [ [ a b ]  [ e f ] ]
+        [ [ c d ]  [ g h ] ]
+    A = [                  ]
+        [ [ i j ]  [ m n ] ]
+        [ [ k l ]  [ o p ] ]
+
+    B = [ q r ]
+
+    C = sum<1, 0>(A, B)
+
+      = [  ]
+
+### Examples: Outer Products
+
+The outer product is a coalescing of two tensors into a new, higher dimensional one.
+
+#### Example 1
+
+    A = [ a b ]
+
+    B = [ c d ]
+
+    A (*) B = [ a b ]
+              [ c d ]
