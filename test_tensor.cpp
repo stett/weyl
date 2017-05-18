@@ -43,6 +43,20 @@ TEST_CASE("Copy constructor", "[tensor]") {
     REQUIRE(t2[1][2] == 6.0f);
 }
 
+TEST_CASE("Tensor dimensionality internals", "[tensor]") {
+    REQUIRE((detail::Dimension<0, 1, 2, 3>::value == 1));
+    REQUIRE((detail::Dimension<1, 1, 2, 3>::value == 2));
+    REQUIRE((detail::Dimension<2, 1, 2, 3>::value == 3));
+}
+
+TEST_CASE("Index reduction internals", "[tensor]") {
+    using OriginalT = tensor<float, 1, 2, 3>;
+    using ReducedT = weyl::detail::Reduction<1, float>::Post<1, 2, 3>::reduced_tensor_t;
+    REQUIRE(ReducedT::dimensions::count == 2);
+    REQUIRE(ReducedT::dimension<0>::value == 1);
+    REQUIRE(ReducedT::dimension<1>::value == 3);
+}
+
 TEST_CASE("Tensor dimensionality", "[tensor]") {
     using T = tensor<float, 2, 3, 1>;
     REQUIRE(T::dimensions::count == 3);
@@ -82,7 +96,31 @@ TEST_CASE("Single index tensor summation", "[tensor]") {
     REQUIRE(sum == expected_sum);
 }
 
+/*
+TEST_CASE("2x2 * 2x2 tensor product", "[tensor]") {
+    tensor<float, 2, 2> t1({
+        { 1.0f, 2.0f },
+        { 3.0f, 4.0f }
+    });
+
+    tensor<float, 2, 2> t2({
+        { 1.0f, 2.0f },
+        { 3.0f, 4.0f }
+    });
+
+    tensor<float, 2, 2> expected_sum({
+        { (1.0f * 1.0f) + (2.0f * 3.0f), (1.0f * 2.0f) + (2.0f * 4.0f) },
+        { (1.0f * 3.0f) + (3.0f * 4.0f), (2.0f * 3.0f) + (4.0f * 4.0f) }
+    });
+
+    tensor<float, 2, 2> sum = t1.sum<1, 0>(t2);
+    bool equal = sum == expected_sum;
+    REQUIRE(equal);
+}
+*/
+
 TEST_CASE("Multiple index tensor summation", "[tensor]") {
+
     tensor<float, 2, 3, 2> t1({
         { { 1.0f, 2.0f }, { 2.0f, 3.0f }, { 3.0f, 4.0f } },
         { { 4.0f, 5.0f }, { 5.0f, 6.0f }, { 6.0f, 7.0f } }
@@ -93,5 +131,12 @@ TEST_CASE("Multiple index tensor summation", "[tensor]") {
         { { 2.0f, 3.0f }, { 3.0f, 4.0f } },
         { { 3.0f, 4.0f }, { 4.0f, 5.0f } }
     });
+
+    tensor<float, 3, 2> expected_sum({
+        { 1.0f * 1.0f + 2.0f * 2.0f }, // { 1.0f, 2.0f }, { 2.0f, 3.0f }, { 3.0f, 4.0f } * { 1.0f, 2.0f }, { 2.0f, 3.0f }, { 3.0f, 4.0f },
+        { 2.0f * 2.0f + 3.0f * 3.0f },
+        { 3.0f * 3.0f + 4.0f * 4.0f }
+    });
+
     //REQUIRE(t1.sum<>);
 }
