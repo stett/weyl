@@ -51,14 +51,14 @@ TEST_CASE("Tensor dimensionality internals", "[tensor]") {
 
 TEST_CASE("Single index reduction internals (3D)", "[tensor]") {
     using ReducedT = weyl::detail::Reduction<0, 1, float>::Post<1, 2, 3>::reduced_tensor_t;
-    REQUIRE(ReducedT::dimensions::count == 2);
+    REQUIRE(ReducedT::rank::value == 2);
     REQUIRE(ReducedT::dimension<0>::value == 1);
     REQUIRE(ReducedT::dimension<1>::value == 3);
 }
 
 TEST_CASE("Single index reduction internals (9D)", "[tensor]") {
     using ReducedT = weyl::detail::Reduction<0, 6, float>::Post<1, 2, 3, 4, 5, 6, 7, 8, 9>::reduced_tensor_t;
-    REQUIRE(ReducedT::dimensions::count == 8);
+    REQUIRE(ReducedT::rank::value == 8);
     REQUIRE(ReducedT::dimension<0>::value == 1);
     REQUIRE(ReducedT::dimension<1>::value == 2);
     REQUIRE(ReducedT::dimension<2>::value == 3);
@@ -69,10 +69,10 @@ TEST_CASE("Single index reduction internals (9D)", "[tensor]") {
     REQUIRE(ReducedT::dimension<7>::value == 9);
 }
 
-TEST_CASE("Double index reduction internals (9D)", "[tensor]") {
-    using ReducedT = weyl::detail::Reduction<3, 6, float>::Post<1, 2, 3, 4, 5, 6, 7, 8, 9>::reduced_tensor_t;
+//TEST_CASE("Double index reduction internals (9D)", "[tensor]") {
+//    using ReducedT = weyl::detail::Reduction<3, 6, float>::Post<1, 2, 3, 4, 5, 6, 7, 8, 9>::reduced_tensor_t;
     /*
-    REQUIRE(ReducedT::dimensions::count == 7);
+    REQUIRE(ReducedT::rank::value == 7);
     REQUIRE(ReducedT::dimension<0>::value == 1);
     REQUIRE(ReducedT::dimension<1>::value == 2);
     REQUIRE(ReducedT::dimension<2>::value == 3);
@@ -81,11 +81,15 @@ TEST_CASE("Double index reduction internals (9D)", "[tensor]") {
     REQUIRE(ReducedT::dimension<5>::value == 8);
     REQUIRE(ReducedT::dimension<6>::value == 9);
     */
+//}
+
+TEST_CASE("Tensor rank", "[tensor]") {
+    using T = tensor<float, 2, 3, 1>;
+    REQUIRE(T::rank::value == 3);
 }
 
 TEST_CASE("Tensor dimensionality", "[tensor]") {
     using T = tensor<float, 2, 3, 1>;
-    REQUIRE(T::dimensions::count == 3);
     REQUIRE(T::dimension<0>::value == 2);
     REQUIRE(T::dimension<1>::value == 3);
     REQUIRE(T::dimension<2>::value == 1);

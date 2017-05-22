@@ -25,18 +25,18 @@ namespace weyl
             enum { value = N0 };
         };
 
-        /// \struct Dimensions
-        /// \brief Given a set of dimensions N_0 through N_m, house the total number of dimensions, m.
+        /// \struct Rank
+        /// \brief Given a set of dimensions N_0 through N_m, house the rank, m.
         template <size_t N0, size_t... N>
-        struct Dimensions
+        struct Rank
         {
-            enum { count = 1 + (int)Dimensions<N...>::count };
+            enum { value = 1 + (int)Rank<N...>::value };
         };
 
         template <size_t N>
-        struct Dimensions<N>
+        struct Rank<N>
         {
-            enum { count = 1 };
+            enum { value = 1 };
         };
 
         /// \struct Reduction
@@ -81,7 +81,7 @@ namespace weyl
             template <size_t... M>
             struct Operand
             {
-                constexpr size_t OffsetJ = Dimensions<N...>::count + J;
+                constexpr size_t OffsetJ = Rank<N...>::count + J;
                 using result_t = Reduction<>
             };
         };
@@ -97,7 +97,7 @@ namespace weyl
         template <size_t I>
         using dimension = detail::Dimension<I, N0, N...>;
 
-        using dimensions = detail::Dimensions<N0, N...>;
+        using rank = detail::Rank<N0, N...>;
 
         using initializer = typename std::initializer_list< typename tensor<T, N...>::initializer >;
 
@@ -177,7 +177,7 @@ namespace weyl
         template <size_t I>
         using dimension = detail::Dimension<I, N>;
 
-        using dimensions = detail::Dimensions<N>;
+        using rank = detail::Rank<N>;
 
         using initializer = std::initializer_list<T>;
 
@@ -209,8 +209,8 @@ namespace weyl
                 "Indexes over which to sum must have equal dimensionality between tensors.");
 
             //
-            // int dim = Dimensions<M0, M...>::count;
-            // tensor<T, M[0], M[1], ..., M[J], ..., M[dim]> result;
+            // int rank = Rank<M0, M...>::count;
+            // tensor<T, M[0], M[1], ..., M[J], ..., M[rank]> result;
             //
 
             for (size_t n = 0; n < N; ++n) {
