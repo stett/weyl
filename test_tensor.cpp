@@ -49,15 +49,16 @@ TEST_CASE("Tensor dimensionality internals", "[tensor]") {
     REQUIRE((detail::Dimension<2, 1, 2, 3>::value == 3));
 }
 
+/*
 TEST_CASE("Single index reduction internals (3D)", "[tensor]") {
-    using ReducedT = weyl::detail::Reduction<0, 1, float>::Post<1, 2, 3>::reduced_tensor_t;
+    using ReducedT = weyl::detail::Reduction<1, float>::reduced_tensor_t<1, 2, 3>;
     REQUIRE(ReducedT::rank::value == 2);
     REQUIRE(ReducedT::dimension<0>::value == 1);
     REQUIRE(ReducedT::dimension<1>::value == 3);
 }
 
 TEST_CASE("Single index reduction internals (9D)", "[tensor]") {
-    using ReducedT = weyl::detail::Reduction<0, 6, float>::Post<1, 2, 3, 4, 5, 6, 7, 8, 9>::reduced_tensor_t;
+    using ReducedT = weyl::detail::Reduction<6, float>::reduced_tensor_t<1, 2, 3, 4, 5, 6, 7, 8, 9>;
     REQUIRE(ReducedT::rank::value == 8);
     REQUIRE(ReducedT::dimension<0>::value == 1);
     REQUIRE(ReducedT::dimension<1>::value == 2);
@@ -68,9 +69,16 @@ TEST_CASE("Single index reduction internals (9D)", "[tensor]") {
     REQUIRE(ReducedT::dimension<6>::value == 8);
     REQUIRE(ReducedT::dimension<7>::value == 9);
 }
+*/
+
+
+TEST_CASE("WTF", "[tensor]") {
+
+    using ReducedT = weyl::detail::Reduction<1, weyl::detail::Reducible >::reduced_t<1, 2, 3>;
+}
 
 //TEST_CASE("Double index reduction internals (9D)", "[tensor]") {
-//    using ReducedT = weyl::detail::Reduction<3, 6, float>::Post<1, 2, 3, 4, 5, 6, 7, 8, 9>::reduced_tensor_t;
+//    using ReducedT = weyl::detail::Reduction<3, 6, float>::reduced_tensor_t<1, 2, 3, 4, 5, 6, 7, 8, 9>;
     /*
     REQUIRE(ReducedT::rank::value == 7);
     REQUIRE(ReducedT::dimension<0>::value == 1);

@@ -41,36 +41,30 @@ namespace weyl
 
         /// \struct Reduction
         /// \brief Given a set of dimensions N through M, remove the Ith one, and house a tensor of the resulting dimensionality.
-        template <size_t I, size_t J, typename T, size_t... N>
+        template <size_t I, template<size_t...> class T, size_t... N>
         struct Reduction
         {
-            //static_assert(I < J, "The lower index must come first in a double index reduction");
             template <size_t NM, size_t... M>
-            struct Post
-            {
-                using reduced_tensor_t = typename Reduction<I-1, J, T, N..., NM>::template Post<M...>::reduced_tensor_t;
-            };
+            using reduced_t = typename Reduction<I-1, T, N..., NM>::template reduced_t<M...>;
         };
 
-        template <size_t J, typename T, size_t... N>
-        struct Reduction<0, J, T, N...>
+        template <template<size_t...> class T, size_t... N>
+        struct Reduction<0, T, N...>
         {
             template <size_t NM, size_t... M>
-            struct Post
-            {
-                using reduced_tensor_t = typename Reduction<0, J-1, T, N..., NM>::template Post<M...>::reduced_tensor_t;
-            };
+            using reduced_t = T<N..., M...>;
         };
 
-        template <typename T, size_t... N>
-        struct Reduction<0, 0, T, N...>
+
+        template <size_t I, size_t J, template<size_t...> class T, size_t... N>
+        struct SecondRankReduction
         {
-            template <size_t NM, size_t... M>
-            struct Post
-            {
-                using reduced_tensor_t = tensor<T, N..., M...>;
-            };
+            using reduced_t = Reduction< I, Reduction< J, T >::reduced_t >::reduced_t;
         };
+
+
+        template <size_t... N>
+        struct Reducible { };
 
         /*
         /// \struct Sum
