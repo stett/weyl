@@ -55,6 +55,41 @@ namespace weyl
             using reduced_t = T<N..., M...>;
         };
 
+        /*
+        /// \struct DoubleReduction
+        /// \brief Remove the Ith and Jth dimensions from a type of rank N.
+        template <size_t I, template<size_t...> class T, size_t... N>
+        struct DoubleReduction
+        {
+            template <size_t J, size_t NM, size_t... M>
+            struct SubReduction
+            {
+                template <size_t ML, size_t... L>
+                using reduced_t = typename DoubleReduction<I-1, T, N..., NM>::template SubReduction<J, M...>::template reduced_t<ML, L...>;
+            };
+        };
+
+        template <template<size_t...> class T, size_t... N>
+        struct DoubleReduction<0, T, N...>
+        {
+            template <size_t J, size_t... M>
+            struct SubReduction
+            {
+                template <size_t ML, size_t... L>
+                using reduced_t = typename DoubleReduction<0, T, N...>::template SubReduction<J-1, M..., ML>::template reduced_t<L...>;
+            };
+
+            template <size_t... M>
+            struct SubReduction<0, M...>
+            {
+                template <size_t ML, size_t... L>
+                using reduced_t = T<N..., M..., L...>;
+            };
+        };
+        */
+
+        /// \struct ReducibleTensor
+        /// \brief Provides a wrapper around the tensor template which may be used as a parameter for Reduction
         template <size_t... N>
         struct ReducibleTensor
         {
@@ -62,11 +97,23 @@ namespace weyl
             using tensor_t = tensor<T, N...>;
         };
 
-        /*
-        template <size_t I, size_t J, template<size_t...> class T, size_t... N>
-        struct SecondRankReduction
+        template <size_t J>
+        struct DoubleReducibleTensor
         {
-            using reduced_t = Reduction< I, Reduction< J, T >::reduced_t >::reduced_t;
+            template <size_t... N>
+            struct Sub
+            {
+                template <typename T>
+                using tensor_t = typename Reduction< J, ReducibleTensor >::template reduced_t<N...>::template tensor_t<T>;
+            };
+        };
+
+        /*
+        template <size_t J, size_t... N>
+        struct DoubleReducibleTensor
+        {
+            template <typename T>
+            using tensor_t = typename Reduction< J, ReducibleTensor >::template reduced_t<N...>::template tensor_t<T>;
         };
         */
 
