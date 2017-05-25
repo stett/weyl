@@ -118,17 +118,17 @@ namespace weyl
 
         /// \brief Produce a tensor product by summing up dimension I
         /// of this tensor with dimension J of the other.
-        template <size_t I, size_t J, size_t M0, size_t... M>
-        //typename detail::Sum<T, I, J, N0, N0, M0, M0>::ResultT sum(const tensor<T, M0, M...>& other) {
-        tensor<T, 2, 2> sum(const tensor<T, M0, M...>& other) {
+        template <size_t I, size_t J, size_t... M>
+        typename detail::TensorConvolution<rank::value, I, J, T, N0, N..., M...>::tensor_t
+        sum(const tensor<T, M...>& other) {
             static_assert(
-                (int)dimension<I>::value == (int)detail::Dimension<J, M0, M...>::value,
+                (int)dimension<I>::value == (int)detail::Dimension<J, M...>::value,
                 "Indexes over which to sum must have equal dimensionality between tensors.");
 
-            //return detail::Sum<T, I, J, N0, N0, M0, M0>::ResultT();
-            return tensor<T, 2, 2>();
+            // Generate the convoluted tensor type and start with an empty one
+            using tensor_t = typename detail::TensorConvolution<rank::value, I, J, T, N0, N..., M...>::tensor_t;
+            return tensor_t();
         }
-
 
         tensor<T, N...>& operator[](size_t i) {
             return data[i];
@@ -144,9 +144,6 @@ namespace weyl
         }
 
         bool operator==(const tensor<T, N0, N...>& other) const {
-            //
-            // TODO: Expand this loop statically...
-            //
             bool result = true;
             for (size_t i = 0; i < N0; ++i)
                 if (data[i] != other.data[i])
@@ -199,27 +196,6 @@ namespace weyl
             std::copy(other.data, other.data + N, data);
         }
 
-        /*
-        /// \brief Produce a tensor product by summing up dimension I
-        /// of this tensor with dimension J of the other.
-        template <size_t I, size_t J, size_t M0, size_t... M>
-        auto sum(const tensor<T, M0, M...>& other) {
-            static_assert(I == 0);
-            static_assert(
-                (int)dimension<I>::value == (int)detail::Dimension<J, M0, M...>::value,
-                "Indexes over which to sum must have equal dimensionality between tensors.");
-
-            //
-            // int rank = Rank<M0, M...>::count;
-            // tensor<T, M[0], M[1], ..., M[J], ..., M[rank]> result;
-            //
-
-            for (size_t n = 0; n < N; ++n) {
-
-            }
-        }
-        */
-
         template <size_t I, size_t J>
         T sum(const tensor<T, N>& other) {
             //static_assert(I == 0);
@@ -269,15 +245,4 @@ namespace weyl
     private:
         T data[N];
     };
-
-    namespace detail
-    {
-        /*
-        template <typename T, size_t I, size_t J, size_t N0, size_t N, size_t M0, size_t M>
-        struct Sum
-        {
-            using ResultT = tensor<T, 2, 2>;
-        };
-        */
-    }
 }
