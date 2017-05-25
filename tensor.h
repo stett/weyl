@@ -55,16 +55,20 @@ namespace weyl
             using reduced_t = T<N..., M...>;
         };
 
+        template <size_t... N>
+        struct ReducibleTensor
+        {
+            template <typename T>
+            using tensor_t = tensor<T, N...>;
+        };
 
+        /*
         template <size_t I, size_t J, template<size_t...> class T, size_t... N>
         struct SecondRankReduction
         {
             using reduced_t = Reduction< I, Reduction< J, T >::reduced_t >::reduced_t;
         };
-
-
-        template <size_t... N>
-        struct Reducible { };
+        */
 
         /*
         /// \struct Sum
