@@ -72,9 +72,20 @@ namespace weyl
             template <size_t... N>
             struct Sub
             {
+                // Note that in "J-1", the offset by one corrects for the fact that we are storing
+                // the index of the second reduction in the parameter pack which is reduced by the
+                // first one. Thus it will be one off.
                 template <typename T>
-                using tensor_t = typename Reduction< J, ReducibleTensor >::template reduced_t<N...>::template tensor_t<T>;
+                using tensor_t = typename Reduction< J - 1, ReducibleTensor >::template reduced_t<N...>::template tensor_t<T>;
             };
+        };
+
+        /// \struct TensorConvolution
+        /// \brief Uses double rank reduction to determine the resultant type of a tensor convolution
+        template <size_t Rank, size_t I, size_t J, typename T, size_t... N>
+        struct TensorConvolution
+        {
+            using tensor_t = typename Reduction< I, DoubleReducibleTensor< Rank + J >::template Sub >::template reduced_t<N...>::template tensor_t<T>;
         };
     }
 

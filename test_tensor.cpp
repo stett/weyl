@@ -70,7 +70,7 @@ TEST_CASE("Single index reduction internals (rank 9)", "[tensor]") {
 }
 
 TEST_CASE("Double rank reduction internals (rank 3)", "[tensor]") {
-    using ReducedT = weyl::detail::Reduction< 0, weyl::detail::DoubleReducibleTensor< 1 >::Sub >::reduced_t<11, 12, 13>::tensor_t<float>;
+    using ReducedT = weyl::detail::Reduction< 0, weyl::detail::DoubleReducibleTensor< 2 >::Sub >::reduced_t<11, 12, 13>::tensor_t<float>;
     REQUIRE(ReducedT::rank::value == 1);
     REQUIRE(ReducedT::dimension<0>::value == 12);
 }
@@ -80,11 +80,22 @@ TEST_CASE("Double rank reduction internals (rank 9)", "[tensor]") {
     REQUIRE(ReducedT::rank::value == 7);
     REQUIRE(ReducedT::dimension<0>::value == 1);
     REQUIRE(ReducedT::dimension<1>::value == 3);
-    REQUIRE(ReducedT::dimension<2>::value == 4);
+    REQUIRE(ReducedT::dimension<2>::value == 5);
     REQUIRE(ReducedT::dimension<3>::value == 6);
     REQUIRE(ReducedT::dimension<4>::value == 7);
     REQUIRE(ReducedT::dimension<5>::value == 8);
     REQUIRE(ReducedT::dimension<6>::value == 9);
+}
+
+TEST_CASE("Tensor convolution type internals", "[tensor]") {
+    //                              [tensor 1's rank]--v  v--[tensor 1's index]
+    using ConvolvedT = weyl::detail::TensorConvolution<3, 1, 1, float, /* tensor 1 */ 1, 2, 3, /* tensor 2 */ 4, 2, 5>::tensor_t;
+    //                                   [tensor 2's index]--^
+    REQUIRE(ConvolvedT::rank::value == 4);
+    REQUIRE(ConvolvedT::dimension<0>::value == 1);
+    REQUIRE(ConvolvedT::dimension<1>::value == 3);
+    REQUIRE(ConvolvedT::dimension<2>::value == 4);
+    REQUIRE(ConvolvedT::dimension<3>::value == 5);
 }
 
 TEST_CASE("Tensor rank", "[tensor]") {
