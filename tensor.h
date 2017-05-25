@@ -198,8 +198,7 @@ namespace weyl
 
         template <size_t I, size_t J>
         T sum(const tensor<T, N>& other) {
-            //static_assert(I == 0);
-            //static_assert(J == 0);
+            static_assert(I == 0 && J == 0, "Both rank indexes must be zero in the degenerative template.");
             return sum(other);
         }
 
