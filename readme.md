@@ -1,6 +1,6 @@
 # [Weyl](https://en.wikipedia.org/wiki/Weyl)
 
-Weyl is a library for doing non-sparse math with tensors of any finite dimensionality.
+Weyl is a library for doing non-sparse math with tensors of any finite rank.
 
 
 ## Development Notes
