@@ -110,13 +110,13 @@ TEST_CASE("Tensor dimensionality", "[tensor]") {
     REQUIRE(T::dimension<2>::value == 1);
 }
 
-TEST_CASE("Correct tensor summations are callable", "[tensor]") {
+TEST_CASE("Correct tensor convolutions are callable & return correct types", "[tensor]") {
     tensor<float, 2, 3, 1> t1;
     tensor<float, 4, 2, 3> t2;
-    t1.sum<0, 1>(t2);
-    t1.sum<1, 2>(t2);
-    t2.sum<1, 0>(t1);
-    t2.sum<2, 1>(t1);
+    tensor<float, 3, 1, 4, 3> t3 = t1.sum<0, 1>(t2);
+    tensor<float, 2, 1, 4, 2> t4 = t1.sum<1, 2>(t2);
+    tensor<float, 4, 3, 3, 1> t5 = t2.sum<1, 0>(t1);
+    tensor<float, 4, 2, 2, 1> t6 = t2.sum<2, 1>(t1);
 }
 
 TEST_CASE("Tensor comparison", "[tensor]") {
