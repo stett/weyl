@@ -223,9 +223,6 @@ namespace weyl
         }
 
         bool operator==(const tensor<T, N>& other) const {
-            //
-            // TODO: Expand this loop statically...
-            //
             for (size_t i = 0; i < N; ++i)
                 if (data[i] != other.data[i])
                     return false;
