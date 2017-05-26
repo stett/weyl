@@ -16,7 +16,14 @@ TEST_CASE("Tensor single-value constructor", "[tensor]") {
         REQUIRE(t[i][j][k] == value);
 }
 
-TEST_CASE("Tensor initializer-list constructor", "[tensor]") {
+TEST_CASE("Tensor initializer-list constructor (rank 1)", "[tensor]") {
+    tensor<float, 3> t({ 1.0f, 2.0f, 3.0f });
+    REQUIRE(t[0] == 1.0f);
+    REQUIRE(t[1] == 2.0f);
+    REQUIRE(t[2] == 3.0f);
+}
+
+TEST_CASE("Tensor initializer-list constructor (rank 2)", "[tensor]") {
     tensor<float, 2, 3> t({ { 1.0f, 2.0f, 3.0f }, { 4.0f, 5.0f, 6.0f } });
     REQUIRE(t[0][0] == 1.0f);
     REQUIRE(t[0][1] == 2.0f);
@@ -93,17 +100,6 @@ TEST_CASE("Double rank reduction internals (rank 9)", "[tensor]") {
     REQUIRE(ReducedT::dimension<6>::value == 9);
 }
 
-TEST_CASE("Tensor convolution type internals", "[tensor]") {
-    //                              [tensor 1's rank]--v  v--[tensor 1's index]
-    using ConvolvedT = weyl::detail::TensorConvolution<3, 1, 1, float, /* tensor 1 */ 1, 2, 3, /* tensor 2 */ 4, 2, 5>::tensor_t;
-    //                                   [tensor 2's index]--^
-    REQUIRE(ConvolvedT::rank::value == 4);
-    REQUIRE(ConvolvedT::dimension<0>::value == 1);
-    REQUIRE(ConvolvedT::dimension<1>::value == 3);
-    REQUIRE(ConvolvedT::dimension<2>::value == 4);
-    REQUIRE(ConvolvedT::dimension<3>::value == 5);
-}
-
 TEST_CASE("Tensor rank", "[tensor]") {
     using T = tensor<float, 2, 3, 1>;
     REQUIRE(T::rank::value == 3);
@@ -123,10 +119,8 @@ TEST_CASE("Tensor comparison", "[tensor]") {
     tensor<float, 3, 2> t4({ { 1.0f, 2.0f }, { 3.0f, 4.0f }, { 5.0f, 6.0f } });
     REQUIRE(t1 == t2);
     REQUIRE(t1 != t3);
-    REQUIRE(t1 != t4);
     REQUIRE(!(t1 != t2));
     REQUIRE(!(t1 == t3));
-    REQUIRE(!(t1 == t4));
 }
 
 TEST_CASE("Tensor in-place scalar product", "[tensor]") {
@@ -180,6 +174,17 @@ TEST_CASE("Tensor - tensor subtraction", "[tensor]") {
     tensor<float, 2, 3> t3({ { 3.0f, 6.0f, 9.0f }, { 12.0f, 15.0f, 18.0f } });
     tensor<float, 2, 3> t4 = t3 - t2;
     REQUIRE(t4 == t1);
+}
+
+TEST_CASE("Tensor convolution type internals", "[tensor]") {
+    //                              [tensor 1's rank]--v  v--[tensor 1's index]
+    using ConvolvedT = weyl::detail::TensorConvolution<3, 1, 1, float, /* tensor 1 */ 1, 2, 3, /* tensor 2 */ 4, 2, 5>::tensor_t;
+    //                                   [tensor 2's index]--^
+    REQUIRE(ConvolvedT::rank::value == 4);
+    REQUIRE(ConvolvedT::dimension<0>::value == 1);
+    REQUIRE(ConvolvedT::dimension<1>::value == 3);
+    REQUIRE(ConvolvedT::dimension<2>::value == 4);
+    REQUIRE(ConvolvedT::dimension<3>::value == 5);
 }
 
 TEST_CASE("Correct tensor convolutions are callable & return correct types", "[tensor]") {

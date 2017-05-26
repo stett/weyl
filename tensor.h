@@ -180,11 +180,6 @@ namespace weyl
             return data[i];
         }
 
-        template <typename OtherT>
-        bool operator==(const OtherT& other) const {
-            return false;
-        }
-
         bool operator==(const tensor<T, N0, N...>& other) const {
             bool result = true;
             for (size_t i = 0; i < N0; ++i)
@@ -193,19 +188,16 @@ namespace weyl
             return true;
         }
 
-        template <typename OtherT>
-        bool operator!=(const OtherT& other) const {
-            return true;
-        }
-
         bool operator!=(const tensor<T, N0, N...>& other) const {
             return !operator==(other);
         }
 
+        /// \brief Component-wise, in-place tensor product
         tensor<T, N0, N...>& operator*=(const T& value) {
             for (size_t i = 0; i < N0; ++i) data[i] *= value; return *this;
         }
 
+        /// \brief Component-wise tensor product
         tensor<T, N0, N...> operator*(const T& value) const {
             tensor<T, N0, N...> result(*this); result *= value; return result;
         }
@@ -226,7 +218,7 @@ namespace weyl
             tensor<T, N0, N...> result(*this); result -= other; return result;
         }
 
-    private:
+    protected:
         tensor<T, N...> data[N0];
     };
 
@@ -268,11 +260,6 @@ namespace weyl
             return data[i];
         }
 
-        template <typename OtherT>
-        bool operator==(const OtherT& other) const {
-            return false;
-        }
-
         bool operator==(const tensor<T, N>& other) const {
             for (size_t i = 0; i < N; ++i)
                 if (data[i] != other.data[i])
@@ -280,19 +267,16 @@ namespace weyl
             return true;
         }
 
-        template <typename OtherT>
-        bool operator!=(const OtherT& other) const {
-            return true;
-        }
-
         bool operator!=(const tensor<T, N>& other) const {
             return !operator==(other);
         }
 
+        /// \brief Component-wise, in-place tensor product
         tensor<T, N>& operator*=(const T& value) {
             for (size_t i = 0; i < N; ++i) data[i] *= value; return *this;
         }
 
+        /// \brief Component-wise tensor product
         tensor<T, N> operator*(const T& value) const {
             tensor<T, N> result(*this); result *= value; return result;
         }
@@ -313,7 +297,7 @@ namespace weyl
             tensor<T, N> result(*this); result -= other; return result;
         }
 
-    private:
+    protected:
         T data[N];
     };
 
