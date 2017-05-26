@@ -126,6 +126,16 @@ TEST_CASE("Tensor comparison", "[tensor]") {
 TEST_CASE("Correct tensor convolutions are callable & return correct types", "[tensor]") {
     tensor<float, 2, 3, 1> t1;
     tensor<float, 4, 2, 3> t2;
+    tensor<float, 3, 1, 4, 3> t3 = weyl::sum<0, 1>(t1, t2);
+    tensor<float, 2, 1, 4, 2> t4 = weyl::sum<1, 2>(t1, t2);
+    tensor<float, 4, 3, 3, 1> t5 = weyl::sum<1, 0>(t2, t1);
+    tensor<float, 4, 2, 2, 1> t6 = weyl::sum<2, 1>(t2, t1);
+}
+
+/*
+TEST_CASE("Correct tensor convolutions are callable & return correct types", "[tensor]") {
+    tensor<float, 2, 3, 1> t1;
+    tensor<float, 4, 2, 3> t2;
     tensor<float, 3, 1, 4, 3> t3 = t1.sum<0, 1>(t2);
     tensor<float, 2, 1, 4, 2> t4 = t1.sum<1, 2>(t2);
     tensor<float, 4, 3, 3, 1> t5 = t2.sum<1, 0>(t1);
@@ -139,6 +149,7 @@ TEST_CASE("Single index tensor convolution", "[tensor]") {
     float expected_sum = (1.0f * 2.0f) + (2.0f * 3.0f) + (3.0f * 4.0f);
     REQUIRE(sum == expected_sum);
 }
+*/
 
 /*
 TEST_CASE("2x2 * 2x2 tensor product", "[tensor]") {
