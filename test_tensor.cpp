@@ -139,7 +139,6 @@ TEST_CASE("Correct tensor convolutions are callable & return correct types", "[t
 }
 
 
-/*
 TEST_CASE("Single index tensor convolution", "[tensor]") {
     tensor<float, 3> t1(1.0f, 2.0f, 3.0f);
     tensor<float, 3> t2(2.0f, 3.0f, 4.0f);
@@ -148,6 +147,7 @@ TEST_CASE("Single index tensor convolution", "[tensor]") {
     REQUIRE(sum == expected_sum);
 }
 
+/*
 TEST_CASE("2x2 * 2x2 tensor product", "[tensor]") {
     tensor<float, 2, 2> t1({
         { 1.0f, 2.0f },
