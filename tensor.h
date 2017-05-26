@@ -228,6 +228,18 @@ namespace weyl
             return result;
         }
 
+        tensor<T, N0, N...>& operator+=(const tensor<T, N0, N...>& other) {
+            for (size_t i = 0; i < N0; ++i)
+                data[i] += other.data[i];
+            return *this;
+        }
+
+        tensor<T, N0, N...> operator+(const tensor<T, N0, N...>& other) const {
+            tensor<T, N0, N...> result(*this);
+            result += other;
+            return result;
+        }
+
     private:
         tensor<T, N...> data[N0];
     };
@@ -313,6 +325,18 @@ namespace weyl
         tensor<T, N> operator*(const T& value) const {
             tensor<T, N> result(*this);
             result *= value;
+            return result;
+        }
+
+        tensor<T, N>& operator+=(const tensor<T, N>& other) {
+            for (size_t i = 0; i < N; ++i)
+                data[i] += other.data[i];
+            return *this;
+        }
+
+        tensor<T, N> operator+(const tensor<T, N>& other) const {
+            tensor<T, N> result(*this);
+            result += other;
             return result;
         }
 
