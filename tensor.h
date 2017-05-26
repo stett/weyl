@@ -347,4 +347,9 @@ namespace weyl
             detail::Sum< 0, 0, I, J, 1, 1 >::partial(result, a, b, a, b, inner);
         return result;
     }
+
+    template <typename T, size_t... N>
+    tensor<T, N...> operator*(const T& value, const tensor<T, N...>& tens) {
+        return tens * value;
+    }
 }
