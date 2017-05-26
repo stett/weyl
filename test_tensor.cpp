@@ -1,3 +1,4 @@
+#include <type_traits>
 #include "catch.hpp"
 #include "tensor.h"
 using namespace weyl;
@@ -69,6 +70,11 @@ TEST_CASE("Single index reduction internals (rank 9)", "[tensor]") {
     REQUIRE(ReducedT::dimension<7>::value == 9);
 }
 
+TEST_CASE("Double rank reduction internals (rank 2 - degenerative)", "[tensor]") {
+    using ReducedT = weyl::detail::Reduction< 0, weyl::detail::DoubleReducibleTensor< 1 >::Sub >::reduced_t<11, 12>::tensor_t<float>;
+    REQUIRE((std::is_same<ReducedT, float>::value == true));
+}
+
 TEST_CASE("Double rank reduction internals (rank 3)", "[tensor]") {
     using ReducedT = weyl::detail::Reduction< 0, weyl::detail::DoubleReducibleTensor< 2 >::Sub >::reduced_t<11, 12, 13>::tensor_t<float>;
     REQUIRE(ReducedT::rank::value == 1);
@@ -132,26 +138,16 @@ TEST_CASE("Correct tensor convolutions are callable & return correct types", "[t
     tensor<float, 4, 2, 2, 1> t6 = weyl::sum<2, 1>(t2, t1);
 }
 
-/*
-TEST_CASE("Correct tensor convolutions are callable & return correct types", "[tensor]") {
-    tensor<float, 2, 3, 1> t1;
-    tensor<float, 4, 2, 3> t2;
-    tensor<float, 3, 1, 4, 3> t3 = t1.sum<0, 1>(t2);
-    tensor<float, 2, 1, 4, 2> t4 = t1.sum<1, 2>(t2);
-    tensor<float, 4, 3, 3, 1> t5 = t2.sum<1, 0>(t1);
-    tensor<float, 4, 2, 2, 1> t6 = t2.sum<2, 1>(t1);
-}
 
+/*
 TEST_CASE("Single index tensor convolution", "[tensor]") {
     tensor<float, 3> t1(1.0f, 2.0f, 3.0f);
     tensor<float, 3> t2(2.0f, 3.0f, 4.0f);
-    float sum = t1.sum<0, 0>(t2);
+    float sum = weyl::sum<0, 0>(t1, t2);
     float expected_sum = (1.0f * 2.0f) + (2.0f * 3.0f) + (3.0f * 4.0f);
     REQUIRE(sum == expected_sum);
 }
-*/
 
-/*
 TEST_CASE("2x2 * 2x2 tensor product", "[tensor]") {
     tensor<float, 2, 2> t1({
         { 1.0f, 2.0f },

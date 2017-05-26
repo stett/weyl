@@ -64,6 +64,13 @@ namespace weyl
             using tensor_t = tensor<T, N...>;
         };
 
+        template <>
+        struct ReducibleTensor<>
+        {
+            template <typename T>
+            using tensor_t = T;
+        };
+
         /// \struct DoubleReducibleTensor
         /// \brief Provides a second rank reduction, for when two indexes must be removed from a tensor type.
         template <size_t J>
