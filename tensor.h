@@ -158,6 +158,8 @@ namespace weyl
 
         using initializer = typename std::initializer_list< typename tensor<T, N...>::initializer >;
 
+        using tensor_t = tensor<T, N0, N...>;
+
         tensor() {}
 
         tensor(const T& value) {
@@ -168,7 +170,7 @@ namespace weyl
             std::copy(values.begin(), values.end(), data);
         }
 
-        tensor(const tensor<T, N0, N...>& other) {
+        tensor(const tensor_t& other) {
             std::copy(other.data, other.data + N0, data);
         }
 
@@ -180,7 +182,7 @@ namespace weyl
             return data[i];
         }
 
-        bool operator==(const tensor<T, N0, N...>& other) const {
+        bool operator==(const tensor_t& other) const {
             bool result = true;
             for (size_t i = 0; i < N0; ++i)
                 if (data[i] != other.data[i])
@@ -188,40 +190,40 @@ namespace weyl
             return true;
         }
 
-        bool operator!=(const tensor<T, N0, N...>& other) const {
+        bool operator!=(const tensor_t& other) const {
             return !operator==(other);
         }
 
-        tensor<T, N0, N...>& operator*=(const T& value) {
+        tensor_t& operator*=(const T& value) {
             for (size_t i = 0; i < N0; ++i) data[i] *= value; return *this;
         }
 
-        tensor<T, N0, N...> operator*(const T& value) const {
-            tensor<T, N0, N...> result(*this); result *= value; return result;
+        tensor_t operator*(const T& value) const {
+            tensor_t result(*this); result *= value; return result;
         }
 
-        tensor<T, N0, N...>& operator*=(const tensor<T, N0, N...>& other) {
+        tensor_t& operator*=(const tensor_t& other) {
             for (size_t i = 0; i < N0; ++i) data[i] *= other.data[i]; return *this;
         }
 
-        tensor<T, N0, N...> operator*(const tensor<T, N0, N...>& other) const {
-            tensor<T, N0, N...> result(*this); result *= other; return result;
+        tensor_t operator*(const tensor_t& other) const {
+            tensor_t result(*this); result *= other; return result;
         }
 
-        tensor<T, N0, N...>& operator+=(const tensor<T, N0, N...>& other) {
+        tensor_t& operator+=(const tensor_t& other) {
             for (size_t i = 0; i < N0; ++i) data[i] += other.data[i]; return *this;
         }
 
-        tensor<T, N0, N...> operator+(const tensor<T, N0, N...>& other) const {
-            tensor<T, N0, N...> result(*this); result += other; return result;
+        tensor_t operator+(const tensor_t& other) const {
+            tensor_t result(*this); result += other; return result;
         }
 
-        tensor<T, N0, N...>& operator-=(const tensor<T, N0, N...>& other) {
+        tensor_t& operator-=(const tensor_t& other) {
             for (size_t i = 0; i < N0; ++i) data[i] -= other.data[i]; return *this;
         }
 
-        tensor<T, N0, N...> operator-(const tensor<T, N0, N...>& other) const {
-            tensor<T, N0, N...> result(*this); result -= other; return result;
+        tensor_t operator-(const tensor_t& other) const {
+            tensor_t result(*this); result -= other; return result;
         }
 
     protected:
@@ -241,6 +243,8 @@ namespace weyl
 
         using initializer = std::initializer_list<T>;
 
+        using tensor_t = tensor<T, N>;
+
         tensor() {}
 
         tensor(const T& value) {
@@ -254,7 +258,7 @@ namespace weyl
         template <typename... Args>
         tensor(Args... args) : data{ args... } {}
 
-        tensor(const tensor<T, N>& other) {
+        tensor(const tensor_t& other) {
             std::copy(other.data, other.data + N, data);
         }
 
@@ -266,47 +270,47 @@ namespace weyl
             return data[i];
         }
 
-        bool operator==(const tensor<T, N>& other) const {
+        bool operator==(const tensor_t& other) const {
             for (size_t i = 0; i < N; ++i)
                 if (data[i] != other.data[i])
                     return false;
             return true;
         }
 
-        bool operator!=(const tensor<T, N>& other) const {
+        bool operator!=(const tensor_t& other) const {
             return !operator==(other);
         }
 
-        tensor<T, N>& operator*=(const T& value) {
+        tensor_t& operator*=(const T& value) {
             for (size_t i = 0; i < N; ++i) data[i] *= value; return *this;
         }
 
-        tensor<T, N> operator*(const T& value) const {
-            tensor<T, N> result(*this); result *= value; return result;
+        tensor_t operator*(const T& value) const {
+            tensor_t result(*this); result *= value; return result;
         }
 
-        tensor<T, N>& operator*=(const tensor<T, N>& other) {
+        tensor_t& operator*=(const tensor_t& other) {
             for (size_t i = 0; i < N; ++i) data[i] *= other.data[i]; return *this;
         }
 
-        tensor<T, N> operator*(const tensor<T, N>& other) const {
-            tensor<T, N> result(*this); result *= other; return result;
+        tensor_t operator*(const tensor_t& other) const {
+            tensor_t result(*this); result *= other; return result;
         }
 
-        tensor<T, N>& operator+=(const tensor<T, N>& other) {
+        tensor_t& operator+=(const tensor_t& other) {
             for (size_t i = 0; i < N; ++i) data[i] += other.data[i]; return *this;
         }
 
-        tensor<T, N> operator+(const tensor<T, N>& other) const {
+        tensor_t operator+(const tensor_t& other) const {
             tensor<T, N> result(*this); result += other; return result;
         }
 
-        tensor<T, N>& operator-=(const tensor<T, N>& other) {
+        tensor_t& operator-=(const tensor_t& other) {
             for (size_t i = 0; i < N; ++i) data[i] -= other.data[i]; return *this;
         }
 
-        tensor<T, N> operator-(const tensor<T, N>& other) const {
-            tensor<T, N> result(*this); result -= other; return result;
+        tensor_t operator-(const tensor_t& other) const {
+            tensor_t result(*this); result -= other; return result;
         }
 
     protected:
