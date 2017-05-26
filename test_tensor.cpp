@@ -129,6 +129,20 @@ TEST_CASE("Tensor comparison", "[tensor]") {
     REQUIRE(!(t1 == t4));
 }
 
+TEST_CASE("Tensor in-place scalar product", "[tensor]") {
+    tensor<float, 2, 3> t1({ { 1.0f, 2.0f, 3.0f }, { 4.0f, 5.0f, 6.0f } });
+    tensor<float, 2, 3> t2({ { 2.0f, 4.0f, 6.0f }, { 8.0f, 10.0f, 12.0f } });
+    t1 *= 2.0f;
+    REQUIRE(t1 == t2);
+}
+
+TEST_CASE("Tensor new scalar product", "[tensor]") {
+    tensor<float, 2, 3> t1({ { 1.0f, 2.0f, 3.0f }, { 4.0f, 5.0f, 6.0f } });
+    tensor<float, 2, 3> t2({ { 2.0f, 4.0f, 6.0f }, { 8.0f, 10.0f, 12.0f } });
+    tensor<float, 2, 3> t3 = t1 * 2.0f;
+    REQUIRE(t3 == t2);
+}
+
 TEST_CASE("Correct tensor convolutions are callable & return correct types", "[tensor]") {
     tensor<float, 2, 3, 1> t1;
     tensor<float, 4, 2, 3> t2;

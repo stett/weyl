@@ -216,6 +216,18 @@ namespace weyl
             return !operator==(other);
         }
 
+        tensor<T, N0, N...>& operator*=(const T& value) {
+            for (size_t i = 0; i < N0; ++i)
+                data[i] *= value;
+            return *this;
+        }
+
+        tensor<T, N0, N...> operator*(const T& value) const {
+            tensor<T, N0, N...> result(*this);
+            result *= value;
+            return result;
+        }
+
     private:
         tensor<T, N...> data[N0];
     };
@@ -226,7 +238,7 @@ namespace weyl
     {
     public:
 
-        template <size_t I> // In this degenerative case, I should always be zero.
+        template <size_t I> // In this degenerative case, 'I' should always be zero.
         using dimension = detail::Dimension<I, N>;
 
         using rank = detail::Rank<N>;
@@ -290,6 +302,18 @@ namespace weyl
 
         bool operator!=(const tensor<T, N>& other) const {
             return !operator==(other);
+        }
+
+        tensor<T, N>& operator*=(const T& value) {
+            for (size_t i = 0; i < N; ++i)
+                data[i] *= value;
+            return *this;
+        }
+
+        tensor<T, N> operator*(const T& value) const {
+            tensor<T, N> result(*this);
+            result *= value;
+            return result;
         }
 
     private:
