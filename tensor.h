@@ -21,6 +21,7 @@ namespace weyl
 
         using tensor_t = tensor<T, N0, N...>;
 
+        /// \brief Determine the tensor type which would result from convolution with another tensor.
         template <size_t I, size_t J, size_t... M>
         using convolution_t = typename detail::TensorConvolution< detail::Rank<N0, N...>::value, I, J, T, N0, N..., M... >::tensor_t;
 
@@ -114,6 +115,7 @@ namespace weyl
 
         using tensor_t = tensor<T, N>;
 
+        /// \brief Determine the tensor type which would result from convolution with another tensor.
         template <size_t I, size_t J, size_t... M>
         using convolution_t = typename detail::TensorConvolution< detail::Rank<N>::value, I, J, T, N, M... >::tensor_t;
 
