@@ -67,7 +67,6 @@ namespace weyl
             tensor_t result(*this); result *= value; return result;
         }
 
-        /*
         tensor_t& operator*=(const tensor_t& other) {
             for (size_t i = 0; i < N0; ++i) data[i] *= other.data[i]; return *this;
         }
@@ -75,7 +74,6 @@ namespace weyl
         tensor_t operator*(const tensor_t& other) const {
             tensor_t result(*this); result *= other; return result;
         }
-        */
 
         tensor_t& operator+=(const tensor_t& other) {
             for (size_t i = 0; i < N0; ++i) data[i] += other.data[i]; return *this;
@@ -163,7 +161,6 @@ namespace weyl
             tensor_t result(*this); result *= value; return result;
         }
 
-        /*
         tensor_t& operator*=(const tensor_t& other) {
             for (size_t i = 0; i < N; ++i) data[i] *= other.data[i]; return *this;
         }
@@ -171,7 +168,6 @@ namespace weyl
         tensor_t operator*(const tensor_t& other) const {
             tensor_t result(*this); result *= other; return result;
         }
-        */
 
         tensor_t& operator+=(const tensor_t& other) {
             for (size_t i = 0; i < N; ++i) data[i] += other.data[i]; return *this;
