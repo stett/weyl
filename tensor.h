@@ -21,6 +21,9 @@ namespace weyl
 
         using tensor_t = tensor<T, N0, N...>;
 
+        template <size_t I, size_t J, size_t... M>
+        using convolution_t = typename detail::TensorConvolution< detail::Rank<N0, N...>::value, I, J, T, N0, N..., M... >::tensor_t;
+
         tensor() {}
 
         tensor(const T& value) {
@@ -63,6 +66,7 @@ namespace weyl
             tensor_t result(*this); result *= value; return result;
         }
 
+        /*
         tensor_t& operator*=(const tensor_t& other) {
             for (size_t i = 0; i < N0; ++i) data[i] *= other.data[i]; return *this;
         }
@@ -70,6 +74,7 @@ namespace weyl
         tensor_t operator*(const tensor_t& other) const {
             tensor_t result(*this); result *= other; return result;
         }
+        */
 
         tensor_t& operator+=(const tensor_t& other) {
             for (size_t i = 0; i < N0; ++i) data[i] += other.data[i]; return *this;
@@ -108,6 +113,9 @@ namespace weyl
         using initializer = std::initializer_list<T>;
 
         using tensor_t = tensor<T, N>;
+
+        template <size_t I, size_t J, size_t... M>
+        using convolution_t = typename detail::TensorConvolution< detail::Rank<N>::value, I, J, T, N, M... >::tensor_t;
 
         tensor() {}
 
@@ -153,6 +161,7 @@ namespace weyl
             tensor_t result(*this); result *= value; return result;
         }
 
+        /*
         tensor_t& operator*=(const tensor_t& other) {
             for (size_t i = 0; i < N; ++i) data[i] *= other.data[i]; return *this;
         }
@@ -160,6 +169,7 @@ namespace weyl
         tensor_t operator*(const tensor_t& other) const {
             tensor_t result(*this); result *= other; return result;
         }
+        */
 
         tensor_t& operator+=(const tensor_t& other) {
             for (size_t i = 0; i < N; ++i) data[i] += other.data[i]; return *this;
@@ -183,12 +193,14 @@ namespace weyl
 
     /// \brief Produce the tensor which is the convolution of two tensors.
     template <size_t I, size_t J, typename T, size_t... N, size_t... M>
-    typename detail::TensorConvolution< detail::Rank<N...>::value, I, J, T, N..., M... >::tensor_t
+    //typename detail::TensorConvolution< detail::Rank<N...>::value, I, J, T, N..., M... >::tensor_t
+    typename tensor<T, N...>::template convolution_t<I, J, M...>
     sum(const tensor<T, N...>& a, const tensor<T, M...>& b) {
 
         // Determine the resulting tensor type, create an instance of it,
         // and initialize all of its values to "zero".
-        using tensor_t = typename detail::TensorConvolution< detail::Rank<N...>::value, I, J, T, N..., M... >::tensor_t;
+        //using tensor_t = typename detail::TensorConvolution< detail::Rank<N...>::value, I, J, T, N..., M... >::tensor_t;
+        using tensor_t = typename tensor<T, N...>::template convolution_t<I, J, M...>;
         tensor_t result(static_cast<T>(0));
 
         // Do the summation - this loop corresponds to the Riemann sum in an ordinary tensor product.
