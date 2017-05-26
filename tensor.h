@@ -94,6 +94,55 @@ namespace weyl
         {
             using tensor_t = typename Reduction< I, DoubleReducibleTensor< Rank + J >::template Sub >::template reduced_t<N...>::template tensor_t<T>;
         };
+
+        /// \struct Sum
+        /// \brief Use template expansion to perform tensor convolution.
+        template <size_t OuterI, size_t OuterJ, size_t I, size_t J, size_t RankN, size_t RankM>
+        struct Sum
+        {
+            template <typename ResultT, typename PartA, typename PartB, typename T, size_t... N, size_t... M>
+            static void partial(ResultT& result, const PartA& part_a, const PartB& part_b, const tensor<T, N...>& a, const tensor<T, M...>& b, size_t inner) {
+                for (size_t i = 0; i < detail::Dimension<OuterI, N...>::value; ++i)
+                    Sum< OuterI+1, OuterJ, I, J, RankN, RankM >::partial(result[i], part_a[i], part_b, a, b, inner);
+            }
+        };
+
+        template <size_t OuterJ, size_t I, size_t J, size_t RankN, size_t RankM>
+        struct Sum< I, OuterJ, I, J, RankN, RankM >
+        {
+            template <typename ResultT, typename PartA, typename PartB, typename T, size_t... N, size_t... M>
+            static void partial(ResultT& result, const PartA& part_a, const PartB& part_b, const tensor<T, N...>& a, const tensor<T, M...>& b, size_t inner) {
+                Sum< I+1, OuterJ, I, J, RankN, RankM >::partial(result, part_a[inner], part_b, a, b, inner);
+            }
+        };
+
+        template <size_t OuterJ, size_t I, size_t J, size_t RankN, size_t RankM>
+        struct Sum< RankN, OuterJ, I, J, RankN, RankM >
+        {
+            template <typename ResultT, typename PartA, typename PartB, typename T, size_t... N, size_t... M>
+            static void partial(ResultT& result, const PartA& part_a, const PartB& part_b, const tensor<T, N...>& a, const tensor<T, M...>& b, size_t inner) {
+                for (size_t j = 0; j < detail::Dimension<OuterJ, M...>::value; ++j)
+                    Sum< RankN, OuterJ+1, I, J, RankN, RankM >::partial(result[j], part_a, part_b[j], a, b, inner);
+            }
+        };
+
+        template <size_t I, size_t J, size_t RankN, size_t RankM>
+        struct Sum< RankN, J, I, J, RankN, RankM >
+        {
+            template <typename ResultT, typename PartA, typename PartB, typename T, size_t... N, size_t... M>
+            static void partial(ResultT& result, const PartA& part_a, const PartB& part_b, const tensor<T, N...>& a, const tensor<T, M...>& b, size_t inner) {
+                Sum< RankN, J+1, I, J, RankN, RankM >::partial(result, part_a, part_b[inner], a, b, inner);
+            }
+        };
+
+        template <size_t I, size_t J, size_t RankN, size_t RankM>
+        struct Sum< RankN, RankM, I, J, RankN, RankM >
+        {
+            template <typename ResultT, typename PartA, typename PartB, typename T, size_t... N, size_t... M>
+            static void partial(ResultT& result, const PartA& part_a, const PartB& part_b, const tensor<T, N...>& a, const tensor<T, M...>& b, size_t inner) {
+                result += part_a * part_b;
+            }
+        };
     }
 
     template <typename T, size_t N0, size_t... N>
@@ -247,69 +296,31 @@ namespace weyl
         T data[N];
     };
 
-    template <size_t OuterI, size_t OuterJ, size_t I, size_t J, size_t RankN, size_t RankM>
-    struct Sum
-    {
-        template <typename ResultT, typename PartA, typename PartB, typename T, size_t... N, size_t... M>
-        static void partial(ResultT& result, const PartA& part_a, const PartB& part_b, const tensor<T, N...>& a, const tensor<T, M...>& b, size_t inner) {
-            for (size_t i = 0; i < detail::Dimension<OuterI, N...>::value; ++i)
-                Sum< OuterI+1, OuterJ, I, J, RankN, RankM >::partial(result[i], part_a[i], part_b, a, b, inner);
-        }
-    };
-
-    template <size_t OuterJ, size_t I, size_t J, size_t RankN, size_t RankM>
-    struct Sum< I, OuterJ, I, J, RankN, RankM >
-    {
-        template <typename ResultT, typename PartA, typename PartB, typename T, size_t... N, size_t... M>
-        static void partial(ResultT& result, const PartA& part_a, const PartB& part_b, const tensor<T, N...>& a, const tensor<T, M...>& b, size_t inner) {
-            Sum< I+1, OuterJ, I, J, RankN, RankM >::partial(result, part_a[inner], part_b, a, b, inner);
-        }
-    };
-
-    template <size_t OuterJ, size_t I, size_t J, size_t RankN, size_t RankM>
-    struct Sum< RankN, OuterJ, I, J, RankN, RankM >
-    {
-        template <typename ResultT, typename PartA, typename PartB, typename T, size_t... N, size_t... M>
-        static void partial(ResultT& result, const PartA& part_a, const PartB& part_b, const tensor<T, N...>& a, const tensor<T, M...>& b, size_t inner) {
-            for (size_t j = 0; j < detail::Dimension<OuterJ, M...>::value; ++j)
-                Sum< RankN, OuterJ+1, I, J, RankN, RankM >::partial(result[j], part_a, part_b[j], a, b, inner);
-        }
-    };
-
-    template <size_t I, size_t J, size_t RankN, size_t RankM>
-    struct Sum< RankN, J, I, J, RankN, RankM >
-    {
-        template <typename ResultT, typename PartA, typename PartB, typename T, size_t... N, size_t... M>
-        static void partial(ResultT& result, const PartA& part_a, const PartB& part_b, const tensor<T, N...>& a, const tensor<T, M...>& b, size_t inner) {
-            Sum< RankN, J+1, I, J, RankN, RankM >::partial(result, part_a, part_b[inner], a, b, inner);
-        }
-    };
-
-    template <size_t I, size_t J, size_t RankN, size_t RankM>
-    struct Sum< RankN, RankM, I, J, RankN, RankM >
-    {
-        template <typename ResultT, typename PartA, typename PartB, typename T, size_t... N, size_t... M>
-        static void partial(ResultT& result, const PartA& part_a, const PartB& part_b, const tensor<T, N...>& a, const tensor<T, M...>& b, size_t inner) {
-            result += part_a * part_b;
-        }
-    };
-
+    /// \brief Produce the tensor which is the convolution of two tensors.
     template <size_t I, size_t J, typename T, size_t... N, size_t... M>
     typename detail::TensorConvolution< detail::Rank<N...>::value, I, J, T, N..., M... >::tensor_t
     sum(const tensor<T, N...>& a, const tensor<T, M...>& b) {
+
+        // Determine the resulting tensor type, create an instance of it,
+        // and initialize all of its values to "zero".
         using tensor_t = typename detail::TensorConvolution< detail::Rank<N...>::value, I, J, T, N..., M... >::tensor_t;
         tensor_t result(static_cast<T>(0));
+
+        // Do the summation - this loop corresponds to the Riemann sum in an ordinary tensor product.
         for (size_t inner = 0; inner < detail::Dimension<I, N...>::value; ++inner)
-            Sum< 0, 0, I, J, detail::Rank<N...>::value, detail::Rank<M...>::value >::partial(result, a, b, a, b, inner);
+            detail::Sum< 0, 0, I, J, detail::Rank<N...>::value, detail::Rank<M...>::value >::partial(result, a, b, a, b, inner);
+
+        // Return the convolution
         return result;
     }
 
+    /// \brief Degenerate convolution case - mirrors a simple vector dot product.
     template <size_t I, size_t J, typename T, size_t N, size_t M>
     T sum(const tensor<T, N>& a, const tensor<T, M>& b) {
         static_assert(I == 0 && J == 0, "Both tensors have rank 1, so the first dimensions of each must be used in the convolution.");
         T result = static_cast<T>(0);
         for (size_t inner = 0; inner < N; ++inner)
-            Sum< 0, 0, I, J, 1, 1 >::partial(result, a, b, a, b, inner);
+            detail::Sum< 0, 0, I, J, 1, 1 >::partial(result, a, b, a, b, inner);
         return result;
     }
 }
