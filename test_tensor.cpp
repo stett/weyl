@@ -147,7 +147,6 @@ TEST_CASE("Single index tensor convolution", "[tensor]") {
     REQUIRE(sum == expected_sum);
 }
 
-/*
 TEST_CASE("2x2 * 2x2 tensor product", "[tensor]") {
     tensor<float, 2, 2> t1({
         { 1.0f, 2.0f },
@@ -164,11 +163,10 @@ TEST_CASE("2x2 * 2x2 tensor product", "[tensor]") {
         { (1.0f * 3.0f) + (3.0f * 4.0f), (2.0f * 3.0f) + (4.0f * 4.0f) }
     });
 
-    tensor<float, 2, 2> sum = t1.sum<1, 0>(t2);
+    tensor<float, 2, 2> sum = weyl::sum<1, 0>(t1, t2);
     bool equal = sum == expected_sum;
     REQUIRE(equal);
 }
-*/
 
 TEST_CASE("Multiple index tensor summation", "[tensor]") {
 

@@ -298,7 +298,7 @@ namespace weyl
     typename detail::TensorConvolution< detail::Rank<N...>::value, I, J, T, N..., M... >::tensor_t
     sum(const tensor<T, N...>& a, const tensor<T, M...>& b) {
         using tensor_t = typename detail::TensorConvolution< detail::Rank<N...>::value, I, J, T, N..., M... >::tensor_t;
-        tensor_t result;
+        tensor_t result(static_cast<T>(0));
         for (size_t inner = 0; inner < detail::Dimension<I, N...>::value; ++inner)
             Sum< 0, 0, I, J, detail::Rank<N...>::value, detail::Rank<M...>::value >::partial(result, a, b, a, b, inner);
         return result;
@@ -307,7 +307,7 @@ namespace weyl
     template <size_t I, size_t J, typename T, size_t N, size_t M>
     T sum(const tensor<T, N>& a, const tensor<T, M>& b) {
         static_assert(I == 0 && J == 0, "Both tensors have rank 1, so the first dimensions of each must be used in the convolution.");
-        T result = 0.0f; // TODO: Better way of getting default value...
+        T result = static_cast<T>(0);
         for (size_t inner = 0; inner < N; ++inner)
             Sum< 0, 0, I, J, 1, 1 >::partial(result, a, b, a, b, inner);
         return result;
