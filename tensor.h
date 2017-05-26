@@ -192,14 +192,20 @@ namespace weyl
             return !operator==(other);
         }
 
-        /// \brief Component-wise, in-place tensor product
         tensor<T, N0, N...>& operator*=(const T& value) {
             for (size_t i = 0; i < N0; ++i) data[i] *= value; return *this;
         }
 
-        /// \brief Component-wise tensor product
         tensor<T, N0, N...> operator*(const T& value) const {
             tensor<T, N0, N...> result(*this); result *= value; return result;
+        }
+
+        tensor<T, N0, N...>& operator*=(const tensor<T, N0, N...>& other) {
+            for (size_t i = 0; i < N0; ++i) data[i] *= other.data[i]; return *this;
+        }
+
+        tensor<T, N0, N...> operator*(const tensor<T, N0, N...>& other) const {
+            tensor<T, N0, N...> result(*this); result *= other; return result;
         }
 
         tensor<T, N0, N...>& operator+=(const tensor<T, N0, N...>& other) {
@@ -271,14 +277,20 @@ namespace weyl
             return !operator==(other);
         }
 
-        /// \brief Component-wise, in-place tensor product
         tensor<T, N>& operator*=(const T& value) {
             for (size_t i = 0; i < N; ++i) data[i] *= value; return *this;
         }
 
-        /// \brief Component-wise tensor product
         tensor<T, N> operator*(const T& value) const {
             tensor<T, N> result(*this); result *= value; return result;
+        }
+
+        tensor<T, N>& operator*=(const tensor<T, N>& other) {
+            for (size_t i = 0; i < N; ++i) data[i] *= other.data[i]; return *this;
+        }
+
+        tensor<T, N> operator*(const tensor<T, N>& other) const {
+            tensor<T, N> result(*this); result *= other; return result;
         }
 
         tensor<T, N>& operator+=(const tensor<T, N>& other) {
