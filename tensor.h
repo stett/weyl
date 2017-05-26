@@ -172,20 +172,6 @@ namespace weyl
             std::copy(other.data, other.data + N0, data);
         }
 
-        /// \brief Produce a tensor product by summing up dimension I
-        /// of this tensor with dimension J of the other.
-        template <size_t I, size_t J, size_t... M>
-        typename detail::TensorConvolution<rank::value, I, J, T, N0, N..., M...>::tensor_t
-        sum(const tensor<T, M...>& other) {
-            static_assert(
-                (int)dimension<I>::value == (int)detail::Dimension<J, M...>::value,
-                "Indexes over which to sum must have equal dimensionality between tensors.");
-
-            // Generate the convoluted tensor type and start with an empty one
-            using tensor_t = typename detail::TensorConvolution<rank::value, I, J, T, N0, N..., M...>::tensor_t;
-            return tensor_t();
-        }
-
         tensor<T, N...>& operator[](size_t i) {
             return data[i];
         }
@@ -217,39 +203,27 @@ namespace weyl
         }
 
         tensor<T, N0, N...>& operator*=(const T& value) {
-            for (size_t i = 0; i < N0; ++i)
-                data[i] *= value;
-            return *this;
+            for (size_t i = 0; i < N0; ++i) data[i] *= value; return *this;
         }
 
         tensor<T, N0, N...> operator*(const T& value) const {
-            tensor<T, N0, N...> result(*this);
-            result *= value;
-            return result;
+            tensor<T, N0, N...> result(*this); result *= value; return result;
         }
 
         tensor<T, N0, N...>& operator+=(const tensor<T, N0, N...>& other) {
-            for (size_t i = 0; i < N0; ++i)
-                data[i] += other.data[i];
-            return *this;
+            for (size_t i = 0; i < N0; ++i) data[i] += other.data[i]; return *this;
         }
 
         tensor<T, N0, N...> operator+(const tensor<T, N0, N...>& other) const {
-            tensor<T, N0, N...> result(*this);
-            result += other;
-            return result;
+            tensor<T, N0, N...> result(*this); result += other; return result;
         }
 
         tensor<T, N0, N...>& operator-=(const tensor<T, N0, N...>& other) {
-            for (size_t i = 0; i < N0; ++i)
-                data[i] -= other.data[i];
-            return *this;
+            for (size_t i = 0; i < N0; ++i) data[i] -= other.data[i]; return *this;
         }
 
         tensor<T, N0, N...> operator-(const tensor<T, N0, N...>& other) const {
-            tensor<T, N0, N...> result(*this);
-            result -= other;
-            return result;
+            tensor<T, N0, N...> result(*this); result -= other; return result;
         }
 
     private:
@@ -286,19 +260,6 @@ namespace weyl
             std::copy(other.data, other.data + N, data);
         }
 
-        template <size_t I, size_t J>
-        T sum(const tensor<T, N>& other) {
-            static_assert(I == 0 && J == 0, "Both rank indexes must be zero in the degenerative template.");
-            return sum(other);
-        }
-
-        T sum(const tensor<T, N>& other) {
-            T total = data[0] * other.data[0];
-            for (size_t i = 1; i < N; ++i)
-                total += data[i] * other.data[i];
-            return total;
-        }
-
         T& operator[](size_t i) {
             return data[i];
         }
@@ -329,39 +290,27 @@ namespace weyl
         }
 
         tensor<T, N>& operator*=(const T& value) {
-            for (size_t i = 0; i < N; ++i)
-                data[i] *= value;
-            return *this;
+            for (size_t i = 0; i < N; ++i) data[i] *= value; return *this;
         }
 
         tensor<T, N> operator*(const T& value) const {
-            tensor<T, N> result(*this);
-            result *= value;
-            return result;
+            tensor<T, N> result(*this); result *= value; return result;
         }
 
         tensor<T, N>& operator+=(const tensor<T, N>& other) {
-            for (size_t i = 0; i < N; ++i)
-                data[i] += other.data[i];
-            return *this;
+            for (size_t i = 0; i < N; ++i) data[i] += other.data[i]; return *this;
         }
 
         tensor<T, N> operator+(const tensor<T, N>& other) const {
-            tensor<T, N> result(*this);
-            result += other;
-            return result;
+            tensor<T, N> result(*this); result += other; return result;
         }
 
         tensor<T, N>& operator-=(const tensor<T, N>& other) {
-            for (size_t i = 0; i < N; ++i)
-                data[i] -= other.data[i];
-            return *this;
+            for (size_t i = 0; i < N; ++i) data[i] -= other.data[i]; return *this;
         }
 
         tensor<T, N> operator-(const tensor<T, N>& other) const {
-            tensor<T, N> result(*this);
-            result -= other;
-            return result;
+            tensor<T, N> result(*this); result -= other; return result;
         }
 
     private:
