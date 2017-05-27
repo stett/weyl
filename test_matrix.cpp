@@ -4,19 +4,20 @@ using namespace weyl;
 
 
 TEST_CASE("Matrix product (square)", "[matrix]") {
-    matrix<float, 3, 3> a({
+
+    matrix<float, 3, 3> m1({
         { 1.0f, 2.0f, 3.0f },
         { 2.0f, 3.0f, 4.0f },
         { 3.0f, 4.0f, 5.0f }
     });
 
-    matrix<float, 3, 3> b({
+    matrix<float, 3, 3> m2({
         { 4.0f, 5.0f, 6.0f },
         { 5.0f, 6.0f, 7.0f },
         { 6.0f, 7.0f, 8.0f }
     });
 
-    matrix<float, 3, 3> product = a * b;
+    matrix<float, 3, 3> product = m1 * m2;
 
     matrix<float, 3, 3> expected_product({
         { 32.0f, 38.0f, 44.0f },
@@ -25,4 +26,28 @@ TEST_CASE("Matrix product (square)", "[matrix]") {
     });
 
     REQUIRE(product == expected_product);
+}
+
+TEST_CASE("Matrix row extraction", "[matrix]") {
+    matrix<float, 3, 3> m({
+        { 1.0f, 2.0f, 3.0f },
+        { 4.0f, 5.0f, 6.0f },
+        { 7.0f, 8.0f, 9.0f }
+    });
+
+    REQUIRE((m.row<0>() == vector<float, 3>(1.0f, 2.0f, 3.0f)));
+    REQUIRE((m.row<1>() == vector<float, 3>(4.0f, 5.0f, 6.0f)));
+    REQUIRE((m.row<2>() == vector<float, 3>(7.0f, 8.0f, 9.0f)));
+}
+
+TEST_CASE("Matrix column extraction", "[matrix]") {
+    matrix<float, 3, 3> m({
+        { 1.0f, 2.0f, 3.0f },
+        { 4.0f, 5.0f, 6.0f },
+        { 7.0f, 8.0f, 9.0f }
+    });
+
+    REQUIRE((m.col<0>() == vector<float, 3>(1.0f, 4.0f, 7.0f)));
+    REQUIRE((m.col<1>() == vector<float, 3>(2.0f, 5.0f, 8.0f)));
+    REQUIRE((m.col<2>() == vector<float, 3>(3.0f, 6.0f, 9.0f)));
 }

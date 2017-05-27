@@ -191,13 +191,11 @@ namespace weyl
 
     /// \brief Produce the tensor which is the convolution of two tensors.
     template <size_t I, size_t J, typename T, size_t... N, size_t... M>
-    //typename detail::TensorConvolution< detail::Rank<N...>::value, I, J, T, N..., M... >::tensor_t
     typename tensor<T, N...>::template convolution_t<I, J, M...>
     sum(const tensor<T, N...>& a, const tensor<T, M...>& b) {
 
         // Determine the resulting tensor type, create an instance of it,
         // and initialize all of its values to "zero".
-        //using tensor_t = typename detail::TensorConvolution< detail::Rank<N...>::value, I, J, T, N..., M... >::tensor_t;
         using tensor_t = typename tensor<T, N...>::template convolution_t<I, J, M...>;
         tensor_t result(static_cast<T>(0));
 
@@ -219,6 +217,7 @@ namespace weyl
         return result;
     }
 
+    /// \brief Scalar tensor product.
     template <typename T, size_t... N>
     tensor<T, N...> operator*(const T& value, const tensor<T, N...>& tens) {
         return tens * value;
