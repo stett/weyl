@@ -4,12 +4,12 @@ Weyl is a library for doing math with non-sparse tensors of any finite rank and 
 
 ## Testing
 
-The library has been tested on Windows with MinGW using the following commands.
+The library has been tested on Windows with MinGW using the following commands from the repository root.
 
-    g++ tests\test.cpp -I. -Itests -O3 --std=c++14
+    g++ tests\test.cpp -Isrc -Itests -O3 --std=c++14
     .\a.exe
 
-To compile documentation, simply run `doxygen` in the root directory.
+To compile documentation, simply run `doxygen` in the repository root directory.
 
 ## Development Notes
 
