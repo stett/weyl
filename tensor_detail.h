@@ -99,7 +99,7 @@ namespace weyl
         struct Sum
         {
             template <typename ResultT, typename PartA, typename PartB, typename T, size_t... N, size_t... M>
-            static void partial(ResultT& result, const PartA& part_a, const PartB& part_b, const tensor<T, N...>& a, const tensor<T, M...>& b, size_t inner) {
+            inline static void partial(ResultT& result, const PartA& part_a, const PartB& part_b, const tensor<T, N...>& a, const tensor<T, M...>& b, size_t inner) {
                 for (size_t i = 0; i < detail::Dimension<OuterI, N...>::value; ++i)
                     Sum< OuterI+1, OuterJ, I, J, RankN, RankM >::partial(result[i], part_a[i], part_b, a, b, inner);
             }
@@ -109,7 +109,7 @@ namespace weyl
         struct Sum< I, OuterJ, I, J, RankN, RankM >
         {
             template <typename ResultT, typename PartA, typename PartB, typename T, size_t... N, size_t... M>
-            static void partial(ResultT& result, const PartA& part_a, const PartB& part_b, const tensor<T, N...>& a, const tensor<T, M...>& b, size_t inner) {
+            inline static void partial(ResultT& result, const PartA& part_a, const PartB& part_b, const tensor<T, N...>& a, const tensor<T, M...>& b, size_t inner) {
                 Sum< I+1, OuterJ, I, J, RankN, RankM >::partial(result, part_a[inner], part_b, a, b, inner);
             }
         };
@@ -118,7 +118,7 @@ namespace weyl
         struct Sum< RankN, OuterJ, I, J, RankN, RankM >
         {
             template <typename ResultT, typename PartA, typename PartB, typename T, size_t... N, size_t... M>
-            static void partial(ResultT& result, const PartA& part_a, const PartB& part_b, const tensor<T, N...>& a, const tensor<T, M...>& b, size_t inner) {
+            inline static void partial(ResultT& result, const PartA& part_a, const PartB& part_b, const tensor<T, N...>& a, const tensor<T, M...>& b, size_t inner) {
                 for (size_t j = 0; j < detail::Dimension<OuterJ, M...>::value; ++j)
                     Sum< RankN, OuterJ+1, I, J, RankN, RankM >::partial(result[j], part_a, part_b[j], a, b, inner);
             }
@@ -128,7 +128,7 @@ namespace weyl
         struct Sum< RankN, J, I, J, RankN, RankM >
         {
             template <typename ResultT, typename PartA, typename PartB, typename T, size_t... N, size_t... M>
-            static void partial(ResultT& result, const PartA& part_a, const PartB& part_b, const tensor<T, N...>& a, const tensor<T, M...>& b, size_t inner) {
+            inline static void partial(ResultT& result, const PartA& part_a, const PartB& part_b, const tensor<T, N...>& a, const tensor<T, M...>& b, size_t inner) {
                 Sum< RankN, J+1, I, J, RankN, RankM >::partial(result, part_a, part_b[inner], a, b, inner);
             }
         };
@@ -137,7 +137,7 @@ namespace weyl
         struct Sum< RankN, RankM, I, J, RankN, RankM >
         {
             template <typename ResultT, typename PartA, typename PartB, typename T, size_t... N, size_t... M>
-            static void partial(ResultT& result, const PartA& part_a, const PartB& part_b, const tensor<T, N...>& a, const tensor<T, M...>& b, size_t inner) {
+            inline static void partial(ResultT& result, const PartA& part_a, const PartB& part_b, const tensor<T, N...>& a, const tensor<T, M...>& b, size_t inner) {
                 result += part_a * part_b;
             }
         };
