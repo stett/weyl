@@ -1,3 +1,5 @@
+[![Fancy-pants logo](http://stettj.com/assets/weyl.png)](https://github.com/stett/weyl)
+
 Weyl is a single-header library for doing math with dense tensors of any finite rank and dimension. It's named after [this guy](https://en.wikipedia.org/wiki/Weyl).
 
 ## Usage
