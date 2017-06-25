@@ -1,17 +1,20 @@
-# [Weyl](https://en.wikipedia.org/wiki/Weyl)
+# Weyl
 
-Weyl is a library for doing math with non-sparse tensors of any finite rank and dimension.
+Weyl is a single-header library for doing math with non-sparse tensors of any finite rank and dimension. It's named after [this guy](https://en.wikipedia.org/wiki/Weyl).
+
+This library is a step towards generalizing vector and matrix algebra. It contains specializations for those objects in particular, but 
 
 ## Testing
 
-The library has been tested on Windows with MinGW using the following commands from the repository root.
+The library has been tested on Windows with MinGW using the following command from the repository root.
 
-    g++ tests\test.cpp -Isrc -Itests -O3 --std=c++14
-    .\a.exe
+    g++ -std=c++14 tests/test.cpp -I. && .\a.exe
 
-To compile documentation, simply run `doxygen` in the repository root directory.
+## Documentation
 
-## Development Notes
+To compile html documentation, run `doxygen` in the repository root directory.
+
+## Usage
 
 ### Examples: Inner Products
 
@@ -25,7 +28,7 @@ or
 
     tensor<float, 3> abc({ a, b, c});
     tensor<float, 3> def({ d, e, f});
-    tensor<float>::sum<0, 0>(abc, def);
+    float sum = tensor<float>::sum<0, 0>(abc, def);
 
 The `sum` function ought to expand to the following.
 
@@ -33,6 +36,12 @@ The `sum` function ought to expand to the following.
     for (size_t i = 0; i < 3; ++i)
         value += abc[i] * def[i];
     return value;
+
+This is equivalent to using the `vector` extension.
+
+    vector<float, 3> abc({ a, b, c});
+    vector<float, 3> def({ d, e, f});
+    float product = weyl::dot(abc, def);
 
 #### Example 2
 

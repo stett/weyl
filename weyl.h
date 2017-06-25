@@ -2,6 +2,12 @@
 #include <initializer_list>
 #include <algorithm>
 
+// Allow for the internally used sqrt method to be overridden by clients
+#ifndef WEYL_SQRT
+#include <cmath>
+#define WEYL_SQRT std::sqrt
+#endif
+
 namespace weyl
 {
     template <typename T, size_t N0, size_t... N>
@@ -145,8 +151,11 @@ namespace weyl
         };
     }
 
+
     /// \class tensor
-    /// \brief A tensor of arbitrary rank and dimension.
+    /// \brief A tensor of arbitrary rank and dimension, the core Weyl class.
+    ///
+    /// All classes in Weyl are specializations of tensor.
     template <typename T, size_t N0, size_t... N>
     class tensor
     {
@@ -202,35 +211,51 @@ namespace weyl
         }
 
         tensor_t& operator*=(const T& value) {
-            for (size_t i = 0; i < N0; ++i) data[i] *= value; return *this;
+            for (size_t i = 0; i < N0; ++i)
+                data[i] *= value;
+            return *this;
         }
 
         tensor_t operator*(const T& value) const {
-            tensor_t result(*this); result *= value; return result;
+            tensor_t result(*this);
+            result *= value;
+            return result;
         }
 
         tensor_t& operator*=(const tensor_t& other) {
-            for (size_t i = 0; i < N0; ++i) data[i] *= other.data[i]; return *this;
+            for (size_t i = 0; i < N0; ++i)
+                data[i] *= other.data[i];
+            return *this;
         }
 
         tensor_t operator*(const tensor_t& other) const {
-            tensor_t result(*this); result *= other; return result;
+            tensor_t result(*this);
+            result *= other;
+            return result;
         }
 
         tensor_t& operator+=(const tensor_t& other) {
-            for (size_t i = 0; i < N0; ++i) data[i] += other.data[i]; return *this;
+            for (size_t i = 0; i < N0; ++i)
+                data[i] += other.data[i];
+            return *this;
         }
 
         tensor_t operator+(const tensor_t& other) const {
-            tensor_t result(*this); result += other; return result;
+            tensor_t result(*this);
+            result += other;
+            return result;
         }
 
         tensor_t& operator-=(const tensor_t& other) {
-            for (size_t i = 0; i < N0; ++i) data[i] -= other.data[i]; return *this;
+            for (size_t i = 0; i < N0; ++i)
+                data[i] -= other.data[i];
+            return *this;
         }
 
         tensor_t operator-(const tensor_t& other) const {
-            tensor_t result(*this); result -= other; return result;
+            tensor_t result(*this);
+            result -= other;
+            return result;
         }
 
     protected:
@@ -238,6 +263,11 @@ namespace weyl
     };
 
 
+    /// \class tensor<T, N>
+    /// \brief Degenerate, rank-one template for the tensor class.
+    ///
+    /// Higher ranking tensors contain arrays of tensors of one lower rank.
+    /// This is the base, first-rank case which contains only an array of T.
     template <typename T, size_t N>
     class tensor<T, N>
     {
@@ -296,35 +326,51 @@ namespace weyl
         }
 
         tensor_t& operator*=(const T& value) {
-            for (size_t i = 0; i < N; ++i) data[i] *= value; return *this;
+            for (size_t i = 0; i < N; ++i)
+                data[i] *= value;
+            return *this;
         }
 
         tensor_t operator*(const T& value) const {
-            tensor_t result(*this); result *= value; return result;
+            tensor_t result(*this);
+            result *= value;
+            return result;
         }
 
         tensor_t& operator*=(const tensor_t& other) {
-            for (size_t i = 0; i < N; ++i) data[i] *= other.data[i]; return *this;
+            for (size_t i = 0; i < N; ++i)
+                data[i] *= other.data[i];
+            return *this;
         }
 
         tensor_t operator*(const tensor_t& other) const {
-            tensor_t result(*this); result *= other; return result;
+            tensor_t result(*this);
+            result *= other;
+            return result;
         }
 
         tensor_t& operator+=(const tensor_t& other) {
-            for (size_t i = 0; i < N; ++i) data[i] += other.data[i]; return *this;
+            for (size_t i = 0; i < N; ++i)
+                data[i] += other.data[i];
+            return *this;
         }
 
         tensor_t operator+(const tensor_t& other) const {
-            tensor<T, N> result(*this); result += other; return result;
+            tensor<T, N> result(*this);
+            result += other;
+            return result;
         }
 
         tensor_t& operator-=(const tensor_t& other) {
-            for (size_t i = 0; i < N; ++i) data[i] -= other.data[i]; return *this;
+            for (size_t i = 0; i < N; ++i)
+                data[i] -= other.data[i];
+            return *this;
         }
 
         tensor_t operator-(const tensor_t& other) const {
-            tensor_t result(*this); result -= other; return result;
+            tensor_t result(*this);
+            result -= other;
+            return result;
         }
 
     protected:
@@ -364,4 +410,74 @@ namespace weyl
     tensor<T, N...> operator*(const T& value, const tensor<T, N...>& tens) {
         return tens * value;
     }
+
+    /// \brief Inner product for rank-N tensors along the D'th dimension.
+    ///
+    /// This amounts to a dot product for rank-1 tensors.
+    template <typename T, size_t... N, size_t D=0>
+    typename tensor<T, N...>::template convolution_t<D, D, N...>
+    inner(const tensor<T, N...>& a, const tensor<T, N...>& b) {
+        return sum<D, D>(a, b);
+    }
+
+    /// \brief Cross product for 2D first-rank tensors
+    template <typename T>
+    T cross(const tensor<T, 2>& a, const tensor<T, 2>& b) {
+        return (a[0] * b[1]) - (a[1] * b[0]);
+    }
+
+    /// \brief Cross product for 3D first-rank tensors
+    template <typename T>
+    tensor<T, 3> cross(const tensor<T, 3>& a, const tensor<T, 3>& b) {
+        return tensor<T, 3>({
+            (a[1] * b[2]) - (a[2] * b[1]),
+            (a[2] * b[0]) - (a[0] * b[2]),
+            (a[0] * b[1]) - (a[1] * b[0])
+        });
+    }
+
+    /// \brief Vector magnitude squared
+    template <typename T, size_t N>
+    T magnitude_sq(const tensor<T, N>& v) {
+        return inner(v, v);
+    }
+
+    /// \brief Vector magnitude
+    template <typename T, size_t N>
+    T magnitude(const tensor<T, N>& v) {
+        return WEYL_SQRT(magnitude_sq(v));
+    }
+
+    /// \brief Matrix product - the product operator for second-rank tensors
+    template <typename T, size_t ARows, size_t AColsBRows, size_t BCols>
+    typename tensor<T, ARows, AColsBRows>::template convolution_t<1, 0, AColsBRows, BCols>
+    product(const tensor<T, ARows, AColsBRows>& a, const tensor<T, AColsBRows, BCols>& b) {
+        return sum<1, 0>(a, b);
+    }
+
+    /// \brief Extract a row from a 2nd rank tensor (matrix)
+    template <typename T, size_t Rows, size_t Cols>
+    tensor<T, Cols> row(const tensor<T, Rows, Cols>& m, size_t i) {
+        tensor<T, Cols> result;
+        for (size_t j = 0; j < Cols; ++j)
+            result[j] = m[i][j];
+        return result;
+    }
+
+    /// \brief Extract a row from a 2nd rank tensor (matrix)
+    template <size_t I, typename T, size_t Rows, size_t Cols>
+    tensor<T, Cols> row(const tensor<T, Rows, Cols>& m) { return row(m, I); }
+
+    /// \brief Extract a column from a 2nd rank tensor (matrix)
+    template <typename T, size_t Rows, size_t Cols>
+    tensor<T, Rows> col(const tensor<T, Rows, Cols>& m, size_t j) {
+        tensor<T, Rows> result;
+        for (size_t i = 0; i < Cols; ++i)
+            result[i] = m[i][j];
+        return result;
+    }
+
+    /// \brief Extract a column from a 2nd rank tensor (matrix)
+    template <size_t J, typename T, size_t Rows, size_t Cols>
+    tensor<T, Rows> col(const tensor<T, Rows, Cols>& m) { return col(m, J); }
 }
