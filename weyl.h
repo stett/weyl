@@ -413,17 +413,17 @@ namespace weyl
         return tens * value;
     }
 
+    /// \brief Inner product for rank-N tensors along the D'th dimension.
+    ///
+    /// This amounts to a dot product for rank-1 tensors.
+    template <typename T, size_t... N, size_t D=0>
+    typename tensor<T, N...>::template convolution_t<D, D, N...>
+    inner(const tensor<T, N...>& a, const tensor<T, N...>& b) {
+        return sum<D, D>(a, b);
+    }
+
     namespace experimental
     {
-        /// \brief Inner product for rank-N tensors along the D'th dimension.
-        ///
-        /// This amounts to a dot product for rank-1 tensors.
-        template <typename T, size_t... N, size_t D=0>
-        typename tensor<T, N...>::template convolution_t<D, D, N...>
-        inner(const tensor<T, N...>& a, const tensor<T, N...>& b) {
-            return sum<D, D>(a, b);
-        }
-
         /// \brief Cross product for 2D first-rank tensors
         template <typename T>
         T cross(const tensor<T, 2>& a, const tensor<T, 2>& b) {
