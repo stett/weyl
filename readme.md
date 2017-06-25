@@ -60,4 +60,4 @@ To compile html documentation, run `doxygen` in the repository root directory.
 
 ## Notes
 
-Despite the ideal of high-ranking generalizations, for convenience Weyl includes a number of special functions for tensors of particular rank and dimensionality. For example `magnitude` will return the length of a first-rank tensor (vector). These functions remain because they are useful, but they may be removed in future versions of the library.
+Despite the ideal of high-ranking generalizations, for convenience Weyl includes a number of special functions for tensors of particular rank and dimensionality. For example `magnitude` will return the length of a first-rank tensor (vector). These functions remain because they are useful, but they may be removed in future versions of the library. For this reason, they are in the `experimental` namespace.

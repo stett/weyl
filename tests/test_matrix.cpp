@@ -1,6 +1,7 @@
 #include "catch.hpp"
 #include "weyl.h"
 using namespace weyl;
+using namespace weyl::experimental;
 
 
 TEST_CASE("Matrix product (square)", "[matrix]") {
@@ -17,7 +18,7 @@ TEST_CASE("Matrix product (square)", "[matrix]") {
         { 6.0f, 7.0f, 8.0f }
     });
 
-    tensor<float, 3, 3> product = weyl::product(m1, m2);
+    tensor<float, 3, 3> product = weyl::experimental::product(m1, m2);
 
     tensor<float, 3, 3> expected_product({
         { 32.0f, 38.0f, 44.0f },

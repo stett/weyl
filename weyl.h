@@ -413,73 +413,76 @@ namespace weyl
         return tens * value;
     }
 
-    /// \brief Inner product for rank-N tensors along the D'th dimension.
-    ///
-    /// This amounts to a dot product for rank-1 tensors.
-    template <typename T, size_t... N, size_t D=0>
-    typename tensor<T, N...>::template convolution_t<D, D, N...>
-    inner(const tensor<T, N...>& a, const tensor<T, N...>& b) {
-        return sum<D, D>(a, b);
+    namespace experimental
+    {
+        /// \brief Inner product for rank-N tensors along the D'th dimension.
+        ///
+        /// This amounts to a dot product for rank-1 tensors.
+        template <typename T, size_t... N, size_t D=0>
+        typename tensor<T, N...>::template convolution_t<D, D, N...>
+        inner(const tensor<T, N...>& a, const tensor<T, N...>& b) {
+            return sum<D, D>(a, b);
+        }
+
+        /// \brief Cross product for 2D first-rank tensors
+        template <typename T>
+        T cross(const tensor<T, 2>& a, const tensor<T, 2>& b) {
+            return (a[0] * b[1]) - (a[1] * b[0]);
+        }
+
+        /// \brief Cross product for 3D first-rank tensors
+        template <typename T>
+        tensor<T, 3> cross(const tensor<T, 3>& a, const tensor<T, 3>& b) {
+            return tensor<T, 3>({
+                (a[1] * b[2]) - (a[2] * b[1]),
+                (a[2] * b[0]) - (a[0] * b[2]),
+                (a[0] * b[1]) - (a[1] * b[0])
+            });
+        }
+
+        /// \brief Vector magnitude squared
+        template <typename T, size_t N>
+        T magnitude_sq(const tensor<T, N>& v) {
+            return inner(v, v);
+        }
+
+        /// \brief Vector magnitude
+        template <typename T, size_t N>
+        T magnitude(const tensor<T, N>& v) {
+            return WEYL_SQRT(magnitude_sq(v));
+        }
+
+        /// \brief Matrix product - the product operator for second-rank tensors
+        template <typename T, size_t ARows, size_t AColsBRows, size_t BCols>
+        typename tensor<T, ARows, AColsBRows>::template convolution_t<1, 0, AColsBRows, BCols>
+        product(const tensor<T, ARows, AColsBRows>& a, const tensor<T, AColsBRows, BCols>& b) {
+            return sum<1, 0>(a, b);
+        }
+
+        /// \brief Extract a row from a 2nd rank tensor (matrix)
+        template <typename T, size_t Rows, size_t Cols>
+        tensor<T, Cols> row(const tensor<T, Rows, Cols>& m, size_t i) {
+            tensor<T, Cols> result;
+            for (size_t j = 0; j < Cols; ++j)
+                result[j] = m[i][j];
+            return result;
+        }
+
+        /// \brief Extract a row from a 2nd rank tensor (matrix)
+        template <size_t I, typename T, size_t Rows, size_t Cols>
+        tensor<T, Cols> row(const tensor<T, Rows, Cols>& m) { return row(m, I); }
+
+        /// \brief Extract a column from a 2nd rank tensor (matrix)
+        template <typename T, size_t Rows, size_t Cols>
+        tensor<T, Rows> col(const tensor<T, Rows, Cols>& m, size_t j) {
+            tensor<T, Rows> result;
+            for (size_t i = 0; i < Cols; ++i)
+                result[i] = m[i][j];
+            return result;
+        }
+
+        /// \brief Extract a column from a 2nd rank tensor (matrix)
+        template <size_t J, typename T, size_t Rows, size_t Cols>
+        tensor<T, Rows> col(const tensor<T, Rows, Cols>& m) { return col(m, J); }
     }
-
-    /// \brief Cross product for 2D first-rank tensors
-    template <typename T>
-    T cross(const tensor<T, 2>& a, const tensor<T, 2>& b) {
-        return (a[0] * b[1]) - (a[1] * b[0]);
-    }
-
-    /// \brief Cross product for 3D first-rank tensors
-    template <typename T>
-    tensor<T, 3> cross(const tensor<T, 3>& a, const tensor<T, 3>& b) {
-        return tensor<T, 3>({
-            (a[1] * b[2]) - (a[2] * b[1]),
-            (a[2] * b[0]) - (a[0] * b[2]),
-            (a[0] * b[1]) - (a[1] * b[0])
-        });
-    }
-
-    /// \brief Vector magnitude squared
-    template <typename T, size_t N>
-    T magnitude_sq(const tensor<T, N>& v) {
-        return inner(v, v);
-    }
-
-    /// \brief Vector magnitude
-    template <typename T, size_t N>
-    T magnitude(const tensor<T, N>& v) {
-        return WEYL_SQRT(magnitude_sq(v));
-    }
-
-    /// \brief Matrix product - the product operator for second-rank tensors
-    template <typename T, size_t ARows, size_t AColsBRows, size_t BCols>
-    typename tensor<T, ARows, AColsBRows>::template convolution_t<1, 0, AColsBRows, BCols>
-    product(const tensor<T, ARows, AColsBRows>& a, const tensor<T, AColsBRows, BCols>& b) {
-        return sum<1, 0>(a, b);
-    }
-
-    /// \brief Extract a row from a 2nd rank tensor (matrix)
-    template <typename T, size_t Rows, size_t Cols>
-    tensor<T, Cols> row(const tensor<T, Rows, Cols>& m, size_t i) {
-        tensor<T, Cols> result;
-        for (size_t j = 0; j < Cols; ++j)
-            result[j] = m[i][j];
-        return result;
-    }
-
-    /// \brief Extract a row from a 2nd rank tensor (matrix)
-    template <size_t I, typename T, size_t Rows, size_t Cols>
-    tensor<T, Cols> row(const tensor<T, Rows, Cols>& m) { return row(m, I); }
-
-    /// \brief Extract a column from a 2nd rank tensor (matrix)
-    template <typename T, size_t Rows, size_t Cols>
-    tensor<T, Rows> col(const tensor<T, Rows, Cols>& m, size_t j) {
-        tensor<T, Rows> result;
-        for (size_t i = 0; i < Cols; ++i)
-            result[i] = m[i][j];
-        return result;
-    }
-
-    /// \brief Extract a column from a 2nd rank tensor (matrix)
-    template <size_t J, typename T, size_t Rows, size_t Cols>
-    tensor<T, Rows> col(const tensor<T, Rows, Cols>& m) { return col(m, J); }
 }

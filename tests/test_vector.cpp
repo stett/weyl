@@ -1,6 +1,7 @@
 #include <cmath>
 #include "catch.hpp"
 using namespace weyl;
+using namespace weyl::experimental;
 
 TEST_CASE("Vector dot product", "[vector]") {
     tensor<float, 3> v1(1.0f, 2.0f, 3.0f);
