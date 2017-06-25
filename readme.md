@@ -1,20 +1,6 @@
 # Weyl
 
-Weyl is a single-header library for doing math with non-sparse tensors of any finite rank and dimension. It's named after [this guy](https://en.wikipedia.org/wiki/Weyl).
-
-The goal of this library is to take a step towards generalizing vector and matrix algebra to higher ranking objects with more generalized math.
-
-Despite the ideal of high-ranking generalizations, for convenience Weyl includes a number of special functions for tensors of particular rank and dimensionality. For example `magintude` will return the length of a first-rank tensor (vector). These functions remain because they are useful, but they may be removed in future versions of the library.
-
-## Testing
-
-The library has been tested on Windows with MinGW using the following command from the repository root.
-
-    g++ -std=c++14 tests/test.cpp -I. && .\a.exe
-
-## Documentation
-
-To compile html documentation, run `doxygen` in the repository root directory.
+Weyl is a single-header library for doing math with tensors of any finite rank and dimension. It's named after [this guy](https://en.wikipedia.org/wiki/Weyl).
 
 ## Usage
 
@@ -61,3 +47,17 @@ In this case, `sum` will expand to something equivalent to the following, but wi
     for (size_t m = 0; m < 3; ++m) // 2nd dimension of b (1st skipped - it is in the sum)
     for (size_t i = 0; i < 3; ++i) // index for the 2nd and 1st dimensions of a and b respectively
         value[n][m] += a[n][i] * b[i][m];
+
+## Testing
+
+The library has been tested on Windows with MinGW using the following command from the repository root.
+
+    g++ -std=c++14 tests/test.cpp -I. && .\a.exe
+
+## Documentation
+
+To compile html documentation, run `doxygen` in the repository root directory.
+
+## Notes
+
+Despite the ideal of high-ranking generalizations, for convenience Weyl includes a number of special functions for tensors of particular rank and dimensionality. For example `magnitude` will return the length of a first-rank tensor (vector). These functions remain because they are useful, but they may be removed in future versions of the library.
