@@ -14,8 +14,8 @@ The sum across the only index of two single-index tensors, if the indexes are 3-
 
 or
 
-    tensor<float, 3> abc({ a, b, c});
-    tensor<float, 3> def({ d, e, f});
+    weyl::tensor<float, 3> abc({ a, b, c});
+    weyl::tensor<float, 3> def({ d, e, f});
     float product = weyl::sum<0, 0>(abc, def);
 
 The `sum` function template will expand to the following.
@@ -36,13 +36,13 @@ The sum across the second index of a 3x3 tensor with the first index of another 
 
 or
 
-    tensor<float, 3, 3> a({ { ... }, { ... }, { ... } });
-    tensor<float, 3, 3> b({ { ... }, { ... }, { ... } });
-    tensor<float, 3, 3> product = weyl::sum<1, 0>(a, b);
+    weyl::tensor<float, 3, 3> a({ { ... }, { ... }, { ... } });
+    weyl::tensor<float, 3, 3> b({ { ... }, { ... }, { ... } });
+    weyl::tensor<float, 3, 3> product = weyl::sum<1, 0>(a, b);
 
 In this case, `sum` will expand to something equivalent to the following, but with unrolled loops.
 
-    tensor<float, 3, 3> value(0.0f);
+    weyl::tensor<float, 3, 3> value(0.0f);
     for (size_t n = 0; n < 3; ++n) // 1st dimension of a (2nd skipped - it is in the sum)
     for (size_t m = 0; m < 3; ++m) // 2nd dimension of b (1st skipped - it is in the sum)
     for (size_t i = 0; i < 3; ++i) // index for the 2nd and 1st dimensions of a and b respectively
