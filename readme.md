@@ -2,7 +2,9 @@
 
 Weyl is a single-header library for doing math with non-sparse tensors of any finite rank and dimension. It's named after [this guy](https://en.wikipedia.org/wiki/Weyl).
 
-This library is a step towards generalizing vector and matrix algebra. It contains specializations for those objects in particular, but 
+The goal of this library is to take a step towards generalizing vector and matrix algebra to higher ranking objects with more generalized math.
+
+Despite the ideal of high-ranking generalizations, for convenience Weyl includes a number of special functions for tensors of particular rank and dimensionality. For example `magintude` will return the length of a first-rank tensor (vector). These functions remain because they are useful, but they may be removed in future versions of the library.
 
 ## Testing
 
@@ -36,12 +38,6 @@ The `sum` function ought to expand to the following.
     for (size_t i = 0; i < 3; ++i)
         value += abc[i] * def[i];
     return value;
-
-This is equivalent to using the `vector` extension.
-
-    vector<float, 3> abc({ a, b, c});
-    vector<float, 3> def({ d, e, f});
-    float product = weyl::dot(abc, def);
 
 #### Example 2
 

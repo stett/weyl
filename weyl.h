@@ -10,6 +10,8 @@
 
 namespace weyl
 {
+    const char* version = "0.0.2";
+
     template <typename T, size_t N0, size_t... N>
     class tensor;
 
