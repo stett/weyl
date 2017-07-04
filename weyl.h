@@ -1,5 +1,6 @@
 /// \file weyl.h
 /// \brief Weyl is a single-header library for doing math with dense tensors of any finite rank and dimension.
+/// \copyright Copyright (c) 2017 Steven Barnett
 /// 
 /// Weyl is used to perform sums, component products, and inner products between tensors of any
 /// rank and dimension. The function weyl::sum is the workhorse of the library, and is used to
