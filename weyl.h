@@ -127,7 +127,7 @@ namespace weyl
         };
 
         /// \struct TensorConvolution
-        /// \brief Uses double rank reduction to determine the resultant type of a tensor convolution
+        /// \brief Uses double rank reduction to determine the resultant type of a tensor convolution.
         template <size_t Rank, size_t I, size_t J, typename T, size_t... N>
         struct TensorConvolution
         {
@@ -135,10 +135,23 @@ namespace weyl
         };
 
         /// \struct Sum
-        /// \brief Use template expansion to perform tensor convolution.
+        /// \brief Perform one iteration of a tensor convolution. This template is not intended
+        /// for use outside of Weyl, but is exposed for those who want to use it for special
+        /// optimizations or use cases.
+        /// 
+        /// The static member `partial` must be invoked once per dimension for chosen index pair I, J,
+        /// with the same `result` tensor. On the first iteration, the result tensor should be
+        /// populated with zeros.
         template <size_t OuterI, size_t OuterJ, size_t I, size_t J, size_t RankN, size_t RankM>
         struct Sum
         {
+            /// \brief Break down a full tensor summation into individual scalar product "parts".
+            /// \param result The resulting tensor.
+            /// \param part_a The decomposed sub-tensor of the first operand tensor.
+            /// \param part_b The decomposed sub-tensor of the second operand tensor.
+            /// \param a The first operand tensor.
+            /// \param b The second operand tensor.
+            /// \param inner The current value of the index pair.
             template <typename ResultT, typename PartA, typename PartB, typename T, size_t... N, size_t... M>
             inline static void partial(ResultT& result, const PartA& part_a, const PartB& part_b, const tensor<T, N...>& a, const tensor<T, M...>& b, size_t inner) {
                 for (size_t i = 0; i < detail::Dimension<OuterI, N...>::value; ++i)
