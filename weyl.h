@@ -1,3 +1,33 @@
+/// \file weyl.h
+/// \brief Weyl is a single-header library for doing math with dense tensors of any finite rank and dimension.
+/// 
+/// Weyl is used to perform sums, component products, and inner products between tensors of any
+/// rank and dimension. The function weyl::sum is the workhorse of the library, and is used to
+/// compute the inner product of two tensors along dimensions of equal length.
+/// 
+/// Example 1: Vector Dot Product
+///
+/// The sum across the only index of two single-index tensors, if the indexes are 3-dimensional,
+/// is a the dot-product of two 3-dimensional vectors.
+///     [ a b c ] * [ d e f ] = (a * d) + (b * e) + (c * f)
+/// or
+///     weyl::tensor<float, 3> abc({ a, b, c});
+///     weyl::tensor<float, 3> def({ d, e, f});
+///     float product = weyl::sum<0, 0>(abc, def);
+/// 
+/// Example 2: Matrix Product
+/// 
+/// The sum across the second index of a 3x3 tensor with the first index of another 3x3 tensor is essentially a matrix product.
+/// 
+///     [ a b c ]   [ j k l ]   [ (a*j)+(b*m)+(c*p)  (a*k)+(b*n)+(c*q)  (a*l)+(b*o)+(c*r) ]
+///     [ d e f ] * [ m n o ] = [ (d*j)+(e*m)+(f*p)  (d*k)+(e*n)+(f*q)  (d*l)+(e*o)+(f*r) ]
+///     [ g h i ]   [ p q r ]   [ (g*j)+(h*m)+(i*p)  (g*k)+(h*n)+(i*q)  (g*l)+(h*o)+(i*r) ]
+/// or
+///     weyl::tensor<float, 3, 3> a({ { ... }, { ... }, { ... } });
+///     weyl::tensor<float, 3, 3> b({ { ... }, { ... }, { ... } });
+///     weyl::tensor<float, 3, 3> product = weyl::sum<1, 0>(a, b);
+/// 
+
 #pragma once
 #include <initializer_list>
 #include <algorithm>
