@@ -214,9 +214,11 @@ namespace weyl
         template <size_t I>
         using dimension = detail::Dimension<I, N0, N...>;
 
-        using initializer = typename std::initializer_list< typename tensor<T, N...>::initializer >;
+        using initializer_t = typename std::initializer_list< typename tensor<T, N...>::initializer_t >;
 
         using tensor_t = tensor<T, N0, N...>;
+
+        using data_t = tensor<T, N...>[N0];
 
         /// \brief Determine the tensor type which would result from convolution with another tensor.
         template <size_t I, size_t J, size_t... M>
@@ -225,29 +227,29 @@ namespace weyl
         tensor() {}
 
         tensor(const T& value) {
-            std::fill(data, data + N0, tensor<T, N...>(value));
+            std::fill(_data, _data + N0, tensor<T, N...>(value));
         }
 
-        tensor(const initializer& values) {
-            std::copy(values.begin(), values.end(), data);
+        tensor(const initializer_t& values) {
+            std::copy(values.begin(), values.end(), _data);
         }
 
         tensor(const tensor_t& other) {
-            std::copy(other.data, other.data + N0, data);
+            std::copy(other._data, other._data + N0, _data);
         }
 
         tensor<T, N...>& operator[](size_t i) {
-            return data[i];
+            return _data[i];
         }
 
         const tensor<T, N...>& operator[](size_t i) const {
-            return data[i];
+            return _data[i];
         }
 
         bool operator==(const tensor_t& other) const {
             bool result = true;
             for (size_t i = 0; i < N0; ++i)
-                if (data[i] != other.data[i])
+                if (_data[i] != other._data[i])
                     return false;
             return true;
         }
@@ -258,7 +260,7 @@ namespace weyl
 
         tensor_t& operator*=(const T& value) {
             for (size_t i = 0; i < N0; ++i)
-                data[i] *= value;
+                _data[i] *= value;
             return *this;
         }
 
@@ -270,7 +272,7 @@ namespace weyl
 
         tensor_t& operator*=(const tensor_t& other) {
             for (size_t i = 0; i < N0; ++i)
-                data[i] *= other.data[i];
+                _data[i] *= other._data[i];
             return *this;
         }
 
@@ -282,7 +284,7 @@ namespace weyl
 
         tensor_t& operator+=(const tensor_t& other) {
             for (size_t i = 0; i < N0; ++i)
-                data[i] += other.data[i];
+                _data[i] += other._data[i];
             return *this;
         }
 
@@ -294,7 +296,7 @@ namespace weyl
 
         tensor_t& operator-=(const tensor_t& other) {
             for (size_t i = 0; i < N0; ++i)
-                data[i] -= other.data[i];
+                _data[i] -= other._data[i];
             return *this;
         }
 
@@ -304,8 +306,16 @@ namespace weyl
             return result;
         }
 
+        tensor<T, N...>* data() {
+            return _data;
+        }
+
+        const tensor<T, N...>* data() const {
+            return _data;
+        }
+
     protected:
-        tensor<T, N...> data[N0];
+        data_t _data;
     };
 
 
@@ -327,9 +337,11 @@ namespace weyl
         template <size_t I>
         using dimension = detail::Dimension<I, N>;
 
-        using initializer = std::initializer_list<T>;
+        using initializer_t = std::initializer_list<T>;
 
         using tensor_t = tensor<T, N>;
+
+        using data_t = T[N];
 
         /// \brief Determine the tensor type which would result from convolution with another tensor.
         template <size_t I, size_t J, size_t... M>
@@ -338,31 +350,31 @@ namespace weyl
         tensor() {}
 
         tensor(const T& value) {
-            std::fill(data, data + N, value);
+            std::fill(_data, _data + N, value);
         }
 
-        tensor(const initializer& values) {
-            std::copy(values.begin(), values.end(), data);
+        tensor(const initializer_t& values) {
+            std::copy(values.begin(), values.end(), _data);
         }
 
         template <typename... Args>
-        tensor(Args... args) : data{ args... } {}
+        tensor(Args... args) : _data{ args... } {}
 
         tensor(const tensor_t& other) {
-            std::copy(other.data, other.data + N, data);
+            std::copy(other._data, other._data + N, _data);
         }
 
         T& operator[](size_t i) {
-            return data[i];
+            return _data[i];
         }
 
         const T& operator[](size_t i) const {
-            return data[i];
+            return _data[i];
         }
 
         bool operator==(const tensor_t& other) const {
             for (size_t i = 0; i < N; ++i)
-                if (data[i] != other.data[i])
+                if (_data[i] != other._data[i])
                     return false;
             return true;
         }
@@ -373,7 +385,7 @@ namespace weyl
 
         tensor_t& operator*=(const T& value) {
             for (size_t i = 0; i < N; ++i)
-                data[i] *= value;
+                _data[i] *= value;
             return *this;
         }
 
@@ -385,7 +397,7 @@ namespace weyl
 
         tensor_t& operator*=(const tensor_t& other) {
             for (size_t i = 0; i < N; ++i)
-                data[i] *= other.data[i];
+                _data[i] *= other._data[i];
             return *this;
         }
 
@@ -397,7 +409,7 @@ namespace weyl
 
         tensor_t& operator+=(const tensor_t& other) {
             for (size_t i = 0; i < N; ++i)
-                data[i] += other.data[i];
+                _data[i] += other._data[i];
             return *this;
         }
 
@@ -409,7 +421,7 @@ namespace weyl
 
         tensor_t& operator-=(const tensor_t& other) {
             for (size_t i = 0; i < N; ++i)
-                data[i] -= other.data[i];
+                _data[i] -= other._data[i];
             return *this;
         }
 
@@ -419,8 +431,16 @@ namespace weyl
             return result;
         }
 
+        T* data() {
+            return _data;
+        }
+
+        const T* data() const {
+            return _data;
+        }
+
     protected:
-        T data[N];
+        data_t _data;
     };
 
     /// \brief Produce the tensor which is the convolution of two tensors.
