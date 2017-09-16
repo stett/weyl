@@ -1,7 +1,7 @@
 // Catch
 #define CATCH_CONFIG_RUNNER
 #include "catch.hpp"
-#include "weyl.h"
+//#include "weyl.h"
 #include "test_tensor.cpp"
 #include "test_vector.cpp"
 #include "test_matrix.cpp"

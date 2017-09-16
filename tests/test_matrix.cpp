@@ -1,8 +1,7 @@
 #include "catch.hpp"
-#include "weyl.h"
+#include "weyl/weyl.h"
 using namespace weyl;
 
-/*
 TEST_CASE("Matrix product (square)", "[matrix]") {
 
     matrix<float, 3, 3> m1({
@@ -35,12 +34,12 @@ TEST_CASE("Matrix row extraction", "[matrix]") {
         { 7.0f, 8.0f, 9.0f }
     });
 
-    REQUIRE((row<0>(m) == matrix<float, 3>(1.0f, 2.0f, 3.0f)));
-    REQUIRE((row<1>(m) == matrix<float, 3>(4.0f, 5.0f, 6.0f)));
-    REQUIRE((row<2>(m) == matrix<float, 3>(7.0f, 8.0f, 9.0f)));
-    REQUIRE((row(m, 0) == matrix<float, 3>(1.0f, 2.0f, 3.0f)));
-    REQUIRE((row(m, 1) == matrix<float, 3>(4.0f, 5.0f, 6.0f)));
-    REQUIRE((row(m, 2) == matrix<float, 3>(7.0f, 8.0f, 9.0f)));
+    REQUIRE((m.row<0>() == vector<float, 3>(1.0f, 2.0f, 3.0f)));
+    REQUIRE((m.row<1>() == vector<float, 3>(4.0f, 5.0f, 6.0f)));
+    REQUIRE((m.row<2>() == vector<float, 3>(7.0f, 8.0f, 9.0f)));
+    REQUIRE((m.row(0) == vector<float, 3>(1.0f, 2.0f, 3.0f)));
+    REQUIRE((m.row(1) == vector<float, 3>(4.0f, 5.0f, 6.0f)));
+    REQUIRE((m.row(2) == vector<float, 3>(7.0f, 8.0f, 9.0f)));
 }
 
 TEST_CASE("Matrix column extraction", "[matrix]") {
@@ -50,11 +49,10 @@ TEST_CASE("Matrix column extraction", "[matrix]") {
         { 7.0f, 8.0f, 9.0f }
     });
 
-    REQUIRE((col<0>(m) == matrix<float, 3>(1.0f, 4.0f, 7.0f)));
-    REQUIRE((col<1>(m) == matrix<float, 3>(2.0f, 5.0f, 8.0f)));
-    REQUIRE((col<2>(m) == matrix<float, 3>(3.0f, 6.0f, 9.0f)));
-    REQUIRE((col(m, 0) == matrix<float, 3>(1.0f, 4.0f, 7.0f)));
-    REQUIRE((col(m, 1) == matrix<float, 3>(2.0f, 5.0f, 8.0f)));
-    REQUIRE((col(m, 2) == matrix<float, 3>(3.0f, 6.0f, 9.0f)));
+    REQUIRE((m.col<0>() == vector<float, 3>(1.0f, 4.0f, 7.0f)));
+    REQUIRE((m.col<1>() == vector<float, 3>(2.0f, 5.0f, 8.0f)));
+    REQUIRE((m.col<2>() == vector<float, 3>(3.0f, 6.0f, 9.0f)));
+    REQUIRE((m.col(0) == vector<float, 3>(1.0f, 4.0f, 7.0f)));
+    REQUIRE((m.col(1) == vector<float, 3>(2.0f, 5.0f, 8.0f)));
+    REQUIRE((m.col(2) == vector<float, 3>(3.0f, 6.0f, 9.0f)));
 }
-*/

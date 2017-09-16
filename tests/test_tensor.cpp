@@ -1,6 +1,6 @@
 #include <type_traits>
 #include "catch.hpp"
-#include "weyl.h"
+#include "weyl/weyl.h"
 using namespace weyl;
 
 TEST_CASE("Tensor default constructor", "[tensor]") {

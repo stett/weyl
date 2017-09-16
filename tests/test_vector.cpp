@@ -1,9 +1,8 @@
 #include <cmath>
 #include "catch.hpp"
-#include "weyl.h"
+#include "weyl/weyl.h"
 using namespace weyl;
 
-/*
 TEST_CASE("Vector dot product", "[vector]") {
     vector<float, 3> v1(1.0f, 2.0f, 3.0f);
     vector<float, 3> v2(4.0f, 5.0f, 6.0f);
@@ -37,4 +36,3 @@ TEST_CASE("Vector magnitude", "[vector]") {
     vector<float, 2> v(1.0f, 2.0f);
     REQUIRE(v.magnitude() == std::sqrt(5.0f));
 }
-*/
