@@ -1,7 +1,7 @@
-/// \file tensor.h
-/// \brief The contents of this file have been directly ripped from github.com/stett/weyl.
-
 #pragma once
+#ifndef _WEYL_TENSOR_H_
+#define _WEYL_TENSOR_H_
+
 #include <initializer_list>
 #include <algorithm>
 
@@ -582,3 +582,5 @@ namespace weyl
         tensor<T, Rows> col(const tensor<T, Rows, Cols>& m) { return col(m, J); }
     }
 }
+
+#endif

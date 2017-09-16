@@ -1,4 +1,7 @@
 #pragma once
+#ifndef _WEYL_MATRIX_H_
+#define _WEYL_MATRIX_H_
+
 #include "weyl/tensor.h"
 #include "weyl/vector.h"
 
@@ -423,3 +426,5 @@ namespace weyl
         }
     };
 }
+
+#endif

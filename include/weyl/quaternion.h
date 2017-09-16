@@ -1,4 +1,7 @@
 #pragma once
+#ifndef _WEYL_QUATERNION_H_
+#define _WEYL_QUATERNION_H_
+
 #include "weyl/vector.h"
 #include "weyl/matrix.h"
 
@@ -220,3 +223,5 @@ namespace weyl
         return (qm * m) * qm.transpose();
     }
 }
+
+#endif
