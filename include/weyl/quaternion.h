@@ -26,6 +26,18 @@ namespace weyl
 
         quaternion(const vtype& a, const vtype& b) { from_rotation(a,b); }
 
+        quaternion(const matrix<T, 3, 3>& m) {
+            //
+            // TODO: Implement :(
+            //
+        }
+
+        quaternion(const matrix<T, 4, 4>& m) {
+            //
+            // TODO: Implement :(
+            //
+        }
+
         ~quaternion() {}
 
         quaternion& operator=(const quaternion& other) {
@@ -123,7 +135,7 @@ namespace weyl
         }
 
         // Adapted from: http://lolengine.net/blog/2013/09/18/beautiful-maths-quaternion-from-vectors
-        void from_rotation(const vtype& a, const vtype& b) {
+        quaternion& from_rotation(const vtype& a, const vtype& b) {
 
             float norm_a_norm_b = sqrt(dot(a, a) * dot(b, b));
             if (norm_a_norm_b < std::numeric_limits<float>::epsilon()) {
@@ -143,8 +155,18 @@ namespace weyl
 
             // Unsure that this is necessary...
             normalize();
+
+            return *this;
         }
 
+        quaternion& look(const vtype& eye, const vtype& target, const vtype& up) {
+
+            //
+            // TODO: form look-at quaternion
+            //
+
+            return *this;
+        }
 
         quaternion& normalize() {
             T m_inv = 1.0f / magnitude();

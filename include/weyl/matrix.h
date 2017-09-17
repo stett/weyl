@@ -171,6 +171,24 @@ namespace weyl
                 m[i-1][j-1] = _data[i][j];
             return m;
         }
+
+        /// \brief Return a vector containing concatenated rows
+        vector<T, Rows * Cols> rows() const {
+            vector<T, Rows * Cols> result;
+            for (size_t i = 0; i < Rows; ++i)
+            for (size_t j = 0; j < Cols; ++j)
+                result[i + (i * j)] = _data[i][j];
+            return result;
+        }
+
+        /// \brief Return a vector containing concatenated cols
+        vector<T, Rows * Cols> cols() const {
+            vector<T, Rows * Cols> result;
+            for (size_t j = 0; j < Cols; ++j)
+            for (size_t i = 0; i < Rows; ++i)
+                result[i + (i * j)] = _data[i][j];
+            return result;
+        }
     };
 
 
@@ -184,6 +202,11 @@ namespace weyl
         matrix(const T& value = static_cast<T>(1)) : tensor_t(static_cast<T>(0)) {
             for (size_t i = 0; i < Size; ++i)
                 _data[i][i] = value;
+        }
+
+        matrix(const tensor<T, Size>& diag) : tensor_t(static_cast<T>(0)) {
+            for (size_t i = 0; i < Size; ++i)
+                _data[i][i] = diag[i];
         }
 
         matrix(const tensor<T, Size, Size>& tens) : tensor_t(tens) {}
@@ -297,6 +320,24 @@ namespace weyl
         matrix<T, Size, Size> inverse() const {
             matrix<T, Size, Size> result(static_cast<T>(1));
             return adj() * (static_cast<T>(1) / det());
+        }
+
+        /// \brief Return a vector containing concatenated rows
+        vector<T, Size * Size> rows() const {
+            vector<T, Size * Size> result;
+            for (size_t i = 0; i < Size; ++i)
+            for (size_t j = 0; j < Size; ++j)
+                result[i + (i * j)] = _data[i][j];
+            return result;
+        }
+
+        /// \brief Return a vector containing concatenated cols
+        vector<T, Size * Size> cols() const {
+            vector<T, Size * Size> result;
+            for (size_t j = 0; j < Size; ++j)
+            for (size_t i = 0; i < Size; ++i)
+                result[i + (i * j)] = _data[i][j];
+            return result;
         }
     };
 
@@ -423,6 +464,16 @@ namespace weyl
                 { det_inv * _data[1][1], -det_inv * _data[0][1] },
                 { -det_inv * _data[1][0], det_inv * _data[0][0] }
             });
+        }
+
+        /// \brief Return a vector containing concatenated rows
+        vector<T, 4> rows() const {
+            return vector<T, 4>(_data[0][0], _data[0][1], _data[1][0], _data[1][1]);
+        }
+
+        /// \brief Return a vector containing concatenated cols
+        vector<T, 4> cols() const {
+            return vector<T, 4>(_data[0][0], _data[1][0], _data[0][1], _data[1][1]);
         }
     };
 }

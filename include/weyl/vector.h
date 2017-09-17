@@ -10,26 +10,29 @@ namespace weyl
     class vector : public tensor<T, N>
     {
     public:
-        template <typename... Args>
-        vector(Args... args) : tensor_t( static_cast<T>(args)... ) { }
-
         vector() : tensor_t() {}
 
-        vector(const T& value) : tensor_t(value) { }
+        template <typename... Values>
+        vector(const T& value, Values... values) : tensor_t({ value, static_cast<T>(values)... }) { }
 
         vector(const initializer_t& values) : tensor_t(values) { }
 
         vector(const tensor_t& other) : tensor_t(other) { }
 
-        vector(const vector<T, N - 1>& other, T value) {
-            for (size_t i = 0; i < N - 1; ++i)
+        template <size_t M>
+        vector(const vector<T, M>& other) {
+            /*
+            for (size_t i = 0; i < std::min(N, M); ++i)
                 _data[i] = other[i];
-            _data[N - 1] = value;
+                */
         }
 
-        vector(const vector<T, N + 1>& other) {
-            for (size_t i = 0; i < N; ++i)
+        vector(const vector<T, N - 1>& other, const T& extra) {
+            /*
+            for (size_t i = 0; i < N-1; ++i)
                 _data[i] = other[i];
+            _data[N - 1] = extra;
+            */
         }
 
         T magnitude_sq() const {
@@ -38,6 +41,19 @@ namespace weyl
 
         T magnitude() const {
             return sqrt(magnitude_sq());
+        }
+
+        vector<T, N>& normalize() {
+            T mag_inv = static_cast<T>(1) / magnitude();
+            for (size_t i = 0; i < N; ++i)
+                _data[i] *= mag_inv;
+            return *this;
+        }
+
+        vector<T, N> normal() const {
+            vector<T, N> result(*this);
+            result.normalize();
+            return result;
         }
 
         template<size_t I>
@@ -54,6 +70,65 @@ namespace weyl
                 a[i] = _data[i];
                 b[i] = _data[i + N/2];
             }
+        }
+    };
+
+    template <typename T>
+    class vector<T, 2> : public tensor<T, 2>
+    {
+    public:
+        vector() : tensor_t() { }
+        vector(const T& v) : tensor_t({ v }) { }
+        vector(const T& v0, const T& v1) : tensor_t({ v0, v1 }) { }
+        vector(const initializer_t& values) : tensor_t(values) { }
+        vector(const tensor_t& other) : tensor_t(other) { }
+
+        template <size_t M>
+        vector(const vector<T, M>& other) {
+            for (size_t i = 0; i < min(2, M); ++i)
+                _data[i] = other[i];
+        }
+
+        T magnitude_sq() const {
+            return sum<0, 0>(*this, *this);
+        }
+
+        T magnitude() const {
+            return sqrt(magnitude_sq());
+        }
+
+        template<size_t I>
+        vector<T, 1> half() const {
+            return vector<T, 1>(_data[I]);
+        }
+
+        void split(vector<T, 1>& a, vector<T, 1>& b) const {
+            a[0] = _data[0];
+            b[0] = _data[1];
+        }
+    };
+
+    template <typename T>
+    class vector<T, 1> : public tensor<T, 1>
+    {
+    public:
+        vector() : tensor_t() { }
+        vector(const T& v) : tensor_t(v) { }
+        vector(const initializer_t& values) : tensor_t(values) { }
+        vector(const tensor_t& other) : tensor_t(other) { }
+
+        template <size_t M>
+        vector(const vector<T, M>& other) {
+            for (size_t i = 0; i < min(1, M); ++i)
+                _data[i] = other[i];
+        }
+
+        T magnitude_sq() const {
+            return sum<0, 0>(*this, *this);
+        }
+
+        T magnitude() const {
+            return sqrt(magnitude_sq());
         }
     };
 
