@@ -23,7 +23,7 @@ namespace weyl
 
         template <size_t M>
         vector(const vector<T, M>& other) {
-            for (size_t i = 0; i < std::min(N, M); ++i)
+            for (size_t i = 0; i < (N < M ? N : M); ++i)
                 _data[i] = other[i];
         }
 
