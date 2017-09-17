@@ -46,20 +46,24 @@ namespace weyl
 
 #define WEYL_NAMESPACE_INJECTION(NameSpace) \
     namespace NameSpace {                   \
-        template <size_t N>                 \
-        using vec = weyl::vec<N>;           \
-        template <size_t N, size_t M>       \
-        using mat = weyl::mat<N, N>;        \
-        using quat = weyl::quat;            \
-        using vec2 = weyl::vec2;            \
-        using vec3 = weyl::vec3;            \
-        using vec4 = weyl::vec4;            \
-        using ivec2 = weyl::ivec2;          \
-        using ivec3 = weyl::ivec3;          \
-        using ivec4 = weyl::ivec4;          \
-        using mat2 = weyl::mat2;            \
-        using mat3 = weyl::mat3;            \
-        using mat4 = weyl::mat4;            \
-    }                                       \
+        using weyl::float_t;                \
+        using weyl::int_t;                  \
+        using weyl::tensor;                 \
+        using weyl::matrix;                 \
+        using weyl::vector;                 \
+        using weyl::quaternion;             \
+        using weyl::vec;                    \
+        using weyl::mat;                    \
+        using weyl::quat;                   \
+        using weyl::vec2;                   \
+        using weyl::vec3;                   \
+        using weyl::vec4;                   \
+        using weyl::ivec2;                  \
+        using weyl::ivec3;                  \
+        using weyl::ivec4;                  \
+        using weyl::mat2;                   \
+        using weyl::mat3;                   \
+        using weyl::mat4;                   \
+    }
 
 #endif

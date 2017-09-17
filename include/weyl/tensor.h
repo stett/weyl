@@ -537,8 +537,8 @@ namespace weyl
 
     template <typename T, size_t N0, size_t M0, size_t N1, size_t M1>
     tensor<T, N0 + M0, N1 + M1>
-    cat(const tensor<T, N0, M0>& a, const tensor<T, N1, M1>& b) {
-        tensor<T, N0 + N1, M0 + M1> result;
+    cat(const tensor<T, N0, M0>& a, const tensor<T, N1, M1>& b, const T& default = static_cast<T>(0)) {
+        tensor<T, N0 + N1, M0 + M1> result(default);
         for (size_t i = 0; i < N0; ++i)
         for (size_t j = 0; j < M0; ++j)
             result[i][j] = a[i][j];

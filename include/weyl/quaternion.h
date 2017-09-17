@@ -16,7 +16,7 @@ namespace weyl
         typedef vector<T, 3> vtype;
 
     public:
-        quaternion() : s(static_cast<T>(1.0)) {}
+        quaternion() : s(static_cast<T>(1)), v(static_cast<T>(0)) {}
 
         quaternion(const quaternion& other) : s(other.s), v(other.v) {}
 

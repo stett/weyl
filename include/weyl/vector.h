@@ -13,7 +13,9 @@ namespace weyl
         vector() : tensor_t() {}
 
         template <typename... Values>
-        vector(const T& value, Values... values) : tensor_t({ value, static_cast<T>(values)... }) { }
+        vector(const T& v0, const T& v1, Values... values) : tensor_t({ v0, v1, static_cast<T>(values)... }) { }
+
+        vector(const T& value) : tensor_t(value) { }
 
         vector(const initializer_t& values) : tensor_t(values) { }
 
@@ -21,18 +23,14 @@ namespace weyl
 
         template <size_t M>
         vector(const vector<T, M>& other) {
-            /*
             for (size_t i = 0; i < std::min(N, M); ++i)
                 _data[i] = other[i];
-                */
         }
 
         vector(const vector<T, N - 1>& other, const T& extra) {
-            /*
             for (size_t i = 0; i < N-1; ++i)
                 _data[i] = other[i];
             _data[N - 1] = extra;
-            */
         }
 
         T magnitude_sq() const {
@@ -78,7 +76,7 @@ namespace weyl
     {
     public:
         vector() : tensor_t() { }
-        vector(const T& v) : tensor_t({ v }) { }
+        vector(const T& v) : tensor_t(v) { }
         vector(const T& v0, const T& v1) : tensor_t({ v0, v1 }) { }
         vector(const initializer_t& values) : tensor_t(values) { }
         vector(const tensor_t& other) : tensor_t(other) { }
