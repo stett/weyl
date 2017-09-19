@@ -322,6 +322,11 @@ namespace weyl
             return adj() * (static_cast<T>(1) / det());
         }
 
+        /*
+        //
+        // TODO: These functions don't work AT ALL. Why?
+        //
+
         /// \brief Return a vector containing concatenated rows
         vector<T, Size * Size> rows() const {
             vector<T, Size * Size> result;
@@ -339,6 +344,7 @@ namespace weyl
                 result[i + (i * j)] = _data[i][j];
             return result;
         }
+        */
     };
 
 
