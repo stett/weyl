@@ -211,6 +211,21 @@ namespace weyl
 
         matrix(const tensor<T, Size, Size>& tens) : tensor_t(tens) {}
 
+        template <size_t OtherSize>
+        matrix(const tensor<T, OtherSize, OtherSize>& other, const T& diag = static_cast<T>(1), const T& fill=static_cast<T>(0)) {
+            static_assert(OtherSize <= Size, "Can only up-convert a matrix.");
+            for (size_t i = 0; i < Size; ++i)
+            for (size_t j = 0; j < Size; ++j) {
+                if (i < OtherSize && j < OtherSize) {
+                    _data[i][j] = other[i][j];
+                } else if (i == j) {
+                    _data[i][j] = diag;
+                } else {
+                    _data[i][j] = fill;
+                }
+            }
+        }
+
         matrix(const std::initializer_list< std::initializer_list< T > >& initial) : tensor_t(initial) {}
 
         /// \brief Matrix product.
