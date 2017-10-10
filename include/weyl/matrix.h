@@ -199,9 +199,9 @@ namespace weyl
 
         using tensor_t = tensor<T, Size, Size>;
 
-        matrix(const T& value = static_cast<T>(1)) : tensor_t(static_cast<T>(0)) {
+        matrix(const T& diag = static_cast<T>(1), const T& fill = static_cast<T>(0)) : tensor_t(fill) {
             for (size_t i = 0; i < Size; ++i)
-                _data[i][i] = value;
+                _data[i][i] = diag;
         }
 
         matrix(const tensor<T, Size>& diag) : tensor_t(static_cast<T>(0)) {
@@ -372,9 +372,9 @@ namespace weyl
 
         matrix() : tensor_t() {}
 
-        matrix(const T& value) : tensor_t(static_cast<T>(0)) {
+        matrix(const T& diag, const T& fill=static_cast<T>(0)) : tensor_t(fill) {
             for (size_t i = 0; i < 2; ++i)
-                _data[i][i] = value;
+                _data[i][i] = diag;
         }
 
         matrix(const tensor<T, 2, 2>& tens) : tensor_t(tens) {}
