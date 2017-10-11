@@ -23,6 +23,7 @@ namespace weyl
 
         template <size_t M>
         vector(const vector<T, M>& other) {
+            static_assert(M > N, "Only cast down a dimension");
             for (size_t i = 0; i < (N < M ? N : M); ++i)
                 _data[i] = other[i];
         }
