@@ -52,7 +52,7 @@ In this case, `sum` will expand to something equivalent to the following, but wi
 
 The library has been tested on Windows with MinGW using the following command from the repository root.
 
-    g++ -std=c++14 tests/test.cpp -I. && .\a.exe
+    g++ -std=c++14 tests/*.cpp -Iinclude. && .\a.exe && rm a.exe
 
 ## Documentation
 
