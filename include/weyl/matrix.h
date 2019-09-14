@@ -20,7 +20,7 @@ namespace weyl
                 // NOTE: Why does this need to be transposed?
                 //       Something is amiss...
                 //
-                dst[j][i] = src.minor<i, j>().det();
+                dst[j][i] = src.template minor<i, j>().det();
             }
         };
 
@@ -29,7 +29,7 @@ namespace weyl
         {
             static inline void compute(const matrix<T, Size, Size>& src, matrix<T, Size, Size>& dst) {
                 const T sign = static_cast<T>(((long)i + (long)j) % 2 ? -1 : 1);
-                const T val = sign * src.minor<i, j>().det();
+                const T val = sign * src.template minor<i, j>().det();
                 dst[i][j] = val;
             }
         };
@@ -88,6 +88,8 @@ namespace weyl
     public:
 
         using tensor_t = tensor<T, Rows, Cols>;
+
+        using tensor_t::_data;
 
         matrix() : tensor_t() {}
 
@@ -198,6 +200,8 @@ namespace weyl
     public:
 
         using tensor_t = tensor<T, Size, Size>;
+
+        using tensor_t::_data;
 
         matrix(const T& diag = static_cast<T>(1), const T& fill = static_cast<T>(0)) : tensor_t(fill) {
             for (size_t i = 0; i < Size; ++i)
@@ -369,6 +373,8 @@ namespace weyl
     public:
 
         using tensor_t = tensor<T, 2, 2>;
+
+        using tensor_t::_data;
 
         matrix() : tensor_t() {}
 

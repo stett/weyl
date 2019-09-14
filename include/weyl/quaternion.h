@@ -72,7 +72,7 @@ namespace weyl
         }
 
         operator matrix<T, 3, 3>() const {
-            vec3 v2 = v * v;
+            vtype v2 = v * v;
             return matrix<T, 3, 3>({
                 { 1.0f - 2.0f * (v2[1] + v2[2]), 2.0f * (v[0]*v[1] + s*v[2]), 2.0f * (v[0]*v[2] - s*v[1]) },
                 { 2.0f * (v[0]*v[1] - s*v[2]), 1.0f - 2.0f * (v2[0] + v2[2]), 2.0f * (v[1]*v[2] + s*v[0]) },
@@ -119,7 +119,7 @@ namespace weyl
 
         static void axis_angle(quaternion& q, const vtype& axis) {
             float angle = length(axis);
-            q = quaternion<T>::axis_angle(abs(angle) > std::numeric_limits<float>::epsilon() ? axis / angle : vec3(0.0f), angle);
+            q = quaternion<T>::axis_angle(abs(angle) > std::numeric_limits<float>::epsilon() ? axis / angle : vtype(0.0f), angle);
         }
 
         static quaternion axis_angle(const vtype& axis, float angle) {
@@ -139,15 +139,15 @@ namespace weyl
 
             float norm_a_norm_b = sqrt(dot(a, a) * dot(b, b));
             if (norm_a_norm_b < std::numeric_limits<float>::epsilon()) {
-                v = vec3(0.0f, 1.0f, 0.0f);
+                v = vtype(0.0f, 1.0f, 0.0f);
                 s = 0.0f;
-                return;
+                return *this;
             }
             float cos_theta = dot(a, b) / norm_a_norm_b;
             if (cos_theta < -1.0f + std::numeric_limits<float>::epsilon()) {
-                v = vec3(0.0f, 1.0f, 0.0f);
+                v = vtype(0.0f, 1.0f, 0.0f);
                 s = 0.0f;
-                return;
+                return *this;
             }
 
             s = sqrt(0.5f * (1.f + cos_theta));

@@ -1,6 +1,6 @@
 #include <cmath>
 #include "catch.hpp"
-#include "weyl/weyl.h"
+#include "weyl.h"
 using namespace weyl;
 
 TEST_CASE("Vector dot product", "[vector]") {

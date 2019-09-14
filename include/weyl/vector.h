@@ -10,6 +10,12 @@ namespace weyl
     class vector : public tensor<T, N>
     {
     public:
+        using tensor_t = typename tensor<T, N>::tensor_t;
+
+        using initializer_t = typename tensor_t::initializer_t;
+
+        using tensor_t::_data;
+
         vector() : tensor_t() {}
 
         template <typename... Values>
@@ -76,6 +82,12 @@ namespace weyl
     class vector<T, 2> : public tensor<T, 2>
     {
     public:
+        using tensor_t = typename tensor<T, 2>::tensor_t;
+
+        using initializer_t = typename tensor_t::initializer_t;
+
+        using tensor_t::_data;
+
         vector() : tensor_t() { }
         vector(const T& v) : tensor_t(v) { }
         vector(const T& v0, const T& v1) : tensor_t({ v0, v1 }) { }
@@ -84,7 +96,7 @@ namespace weyl
 
         template <size_t M>
         vector(const vector<T, M>& other) {
-            for (size_t i = 0; i < min(2, M); ++i)
+            for (size_t i = 0; i < (2 < M ? 2 : M); ++i)
                 _data[i] = other[i];
         }
 
@@ -111,6 +123,12 @@ namespace weyl
     class vector<T, 1> : public tensor<T, 1>
     {
     public:
+        using tensor_t = typename tensor<T, 1>::tensor_t;
+
+        using initializer_t = typename tensor_t::initializer_t;
+
+        using tensor_t::_data;
+
         vector() : tensor_t() { }
         vector(const T& v) : tensor_t(v) { }
         vector(const initializer_t& values) : tensor_t(values) { }
@@ -118,7 +136,7 @@ namespace weyl
 
         template <size_t M>
         vector(const vector<T, M>& other) {
-            for (size_t i = 0; i < min(1, M); ++i)
+            for (size_t i = 0; i < (1 < M ? 1 : M); ++i)
                 _data[i] = other[i];
         }
 
