@@ -6,7 +6,7 @@ using namespace weyl;
 
 TEST_CASE("2x2 Matrix operations", "[Matrix]") {
 
-    mat<2, 2> A({ { 1.0f, 2.0f }, { 3.0f, 4.0f } });
+    mat2 A({ { 1.0f, 2.0f }, { 3.0f, 4.0f } });
 
     SECTION("Determinant, 2x2") {
         float A_det_expected = -2.0f;
@@ -15,8 +15,8 @@ TEST_CASE("2x2 Matrix operations", "[Matrix]") {
     }
 
     SECTION("Transpose, 2x2") {
-        mat<2, 2> A_transpose_expected({ { 1.0f, 3.0f }, { 2.0f, 4.0f } });
-        mat<2, 2> A_transpose = A.transpose();
+        mat2 A_transpose_expected({ { 1.0f, 3.0f }, { 2.0f, 4.0f } });
+        mat2 A_transpose = A.transpose();
         REQUIRE(A_transpose == A_transpose_expected);
     }
 
@@ -28,33 +28,33 @@ TEST_CASE("2x2 Matrix operations", "[Matrix]") {
     }
 
     SECTION("Minors, 2x2") {
-        mat<2, 2> A_minors_expected({ { 4.0f, 3.0f }, { 2.0f, 1.0f } });
-        mat<2, 2> A_minors = A.minors();
+        mat2 A_minors_expected({ { 4.0f, 3.0f }, { 2.0f, 1.0f } });
+        mat2 A_minors = A.minors();
         REQUIRE(A_minors == A_minors_expected);
     }
 
     SECTION("Cofactor, 2x2") {
-        mat<2, 2> A_cofactor_expected({ { 4.0f, -3.0f }, { -2.0f, 1.0f } });
-        mat<2, 2> A_cofactor = A.cofactor();
+        mat2 A_cofactor_expected({ { 4.0f, -3.0f }, { -2.0f, 1.0f } });
+        mat2 A_cofactor = A.cofactor();
         REQUIRE(A_cofactor == A_cofactor_expected);
     }
 
     SECTION("adjugate, 2x2") {
-        mat<2, 2> A_adj_expected({ { 4.0f, -2.0f }, { -3.0f, 1.0f } });
-        mat<2, 2> A_adj = A.adj();
+        mat2 A_adj_expected({ { 4.0f, -2.0f }, { -3.0f, 1.0f } });
+        mat2 A_adj = A.adj();
         REQUIRE(A_adj == A_adj_expected);
     }
 
     SECTION("Matrix inversion, 2x2") {
-        mat<2, 2> A_inv_expected({ { -2.0f, 1.0f }, { 3.0f/2.0f, -1.0f/2.0f } });
-        mat<2, 2> A_inv = A.inverse();
+        mat2 A_inv_expected({ { -2.0f, 1.0f }, { 3.0f/2.0f, -1.0f/2.0f } });
+        mat2 A_inv = A.inverse();
         REQUIRE(A_inv == A_inv_expected);
     }
 }
 
 TEST_CASE("3x3 Matrix operations", "[Matrix]") {
 
-    mat<3, 3> A({
+    mat3 A({
         { -1.0f, 2.0f, 3.0f },
         {  2.0f, 3.0f, 4.0f },
         { -3.0f, 4.0f, 5.0f } });
@@ -72,17 +72,17 @@ TEST_CASE("3x3 Matrix operations", "[Matrix]") {
     }
 
     SECTION("Minor 0,0") {
-        mat<2, 2> A_minor_00({ { 3.0f, 4.0f }, { 4.0f, 5.0f } });
+        mat2 A_minor_00({ { 3.0f, 4.0f }, { 4.0f, 5.0f } });
         REQUIRE((A.minor<0, 0>() == A_minor_00));
     }
 
     SECTION("Minor 1,0") {
-        mat<2, 2> A_minor_10({ { 2.0f, 3.0f }, { 4.0f, 5.0f } });
+        mat2 A_minor_10({ { 2.0f, 3.0f }, { 4.0f, 5.0f } });
         REQUIRE((A.minor<1, 0>() == A_minor_10));
     }
 
     SECTION("Minor 0,2") {
-        mat<2, 2> A_minor_02({ { 2.0f, 3.0f }, { -3.0f, 4.0f } });
+        mat2 A_minor_02({ { 2.0f, 3.0f }, { -3.0f, 4.0f } });
         REQUIRE((A.minor<0, 2>() == A_minor_02));
     }
 
@@ -91,41 +91,40 @@ TEST_CASE("3x3 Matrix operations", "[Matrix]") {
     }
 
     SECTION("Transpose, 3x3") {
-        mat<3, 3> A_transpose_expected({ { -1.0f, 2.0f, -3.0f }, { 2.0f, 3.0f, 4.0f }, { 3.0f, 4.0f, 5.0f } });
-        mat<3, 3> A_transpose = A.transpose();
+        mat3 A_transpose_expected({ { -1.0f, 2.0f, -3.0f }, { 2.0f, 3.0f, 4.0f }, { 3.0f, 4.0f, 5.0f } });
+        mat3 A_transpose = A.transpose();
         REQUIRE(A_transpose == A_transpose_expected);
     }
 
     SECTION("Minors, 3x3") {
-        mat<3, 3> A_minors_expected({ { -1.0f, -2.0f, -1.0f }, { 22.0f, 4.0f, -10.0f }, { 17.0f, 2.0f, -7.0f } });
-        mat<3, 3> A_minors = A.minors();
+        mat3 A_minors_expected({ { -1.0f, -2.0f, -1.0f }, { 22.0f, 4.0f, -10.0f }, { 17.0f, 2.0f, -7.0f } });
+        mat3 A_minors = A.minors();
         REQUIRE(A_minors == A_minors_expected);
     }
 
     SECTION("Cofactor, 3x3") {
-        mat<3, 3> A_cofactor_expected({ { -1.0f, -22.0f, 17.0f }, { 2.0f, 4.0f, -2.0f }, { -1.0f, 10.0f, -7.0f } });
-        mat<3, 3> A_cofactor = A.cofactor();
+        mat3 A_cofactor_expected({ { -1.0f, -22.0f, 17.0f }, { 2.0f, 4.0f, -2.0f }, { -1.0f, 10.0f, -7.0f } });
+        mat3 A_cofactor = A.cofactor();
         REQUIRE(A_cofactor == A_cofactor_expected);
     }
 
     SECTION("Adjugate, 3x3") {
-        mat<3, 3> A_adjugate_expected({ { -1.0f, 2.0f, -1.0f }, { -22.0f, 4.0f, 10.0f }, { 17.0f, -2.0f, -7.0f } });
-        mat<3, 3> A_adjugate = A.adj();
+        mat3 A_adjugate_expected({ { -1.0f, 2.0f, -1.0f }, { -22.0f, 4.0f, 10.0f }, { 17.0f, -2.0f, -7.0f } });
+        mat3 A_adjugate = A.adj();
         REQUIRE(A_adjugate == A_adjugate_expected);
     }
 
-    /*
     SECTION("Inverse, 3x3") {
-        mat<3, 3> A_inverse_expected({
+        mat3 A_inverse_expected({
             { -1.0f/8.0f, 1.0f/4.0f, -1.0f/8.0f },
             { -11.0f/4.0f, 1.0f/2.0f, 5.0f/4.0f },
             { 17.0f/8.0f, -1.0f/4.0f, -7.0f/8.0f } });
-        mat<3, 3> A_inverse = A.inverse();
-        mat<3, 3> A_inverse_A = A.inverse() * A;
-        mat<3, 3> A_A_inverse = A * A.inverse();
+        mat3 A_inverse = A.inverse();
+        mat3 A_inverse_A = A.inverse() * A;
+        mat3 A_A_inverse = A * A.inverse();
         REQUIRE(A_inverse == A_inverse_expected);
-        REQUIRE((A_inverse_A == mat<3, 3>::identity));
-        REQUIRE((A_A_inverse == mat<3, 3>::identity));
+        REQUIRE((A_inverse_A == mat3::identity()));
+        REQUIRE((A_A_inverse == mat3::identity()));
     }
 
     SECTION("Columns, 3x3") {
@@ -181,5 +180,4 @@ TEST_CASE("3x3 Matrix operations", "[Matrix]") {
 
         REQUIRE(product == expected_product);
     }
-    */
 }

@@ -527,6 +527,13 @@ namespace weyl
             std::copy(other._data, other._data + Rows, _data);
         }
 
+        /// \brief Initialize from a vector on the diagonal
+        tensor(const tensor<T, Rows>& diag) {
+            static_assert(Rows == Cols, "Must be square matrix to initialize with a diagonal vector");
+            std::fill(_data, _data + Rows, tensor<T, Cols>(static_cast<T>(0)));
+            set_diag(diag);
+        }
+
         tensor<T, Cols>& operator[](size_t i) {
             return _data[i];
         }
@@ -711,6 +718,20 @@ namespace weyl
 
         // Square matrix operations
 
+        template<size_t Size=Rows>
+        static constexpr typename std::enable_if<Size == Rows && Size == Cols, tensor_t>::type identity()
+        {
+            return tensor_t(tensor<T, Size>(static_cast<T>(1)));
+        }
+
+        /// \brief Directly set the diagonal
+        template <size_t Size=Rows>
+        typename std::enable_if<Size == Rows && Size == Cols, void>::type
+        set_diag(const tensor<T, Size>& diag) {
+            for (size_t i = 0; i < Size; ++i)
+                _data[i][i] = diag[i];
+        }
+
         /// \brief Get the determinant of the matrix
         template <size_t Size=Rows>
         typename std::enable_if<Size == Rows && Size == Cols, T>::type
@@ -800,6 +821,13 @@ namespace weyl
 
         tensor(const tensor_t& other) {
             std::copy(other._data, other._data + Rows, _data);
+        }
+
+        tensor(const tensor<T, 2>& diag) {
+            _data[0][0] = diag[0];
+            _data[1][1] = diag[1];
+            _data[0][1] = static_cast<T>(0);
+            _data[1][0] = static_cast<T>(0);
         }
 
         tensor<T, Cols>& operator[](size_t i) {
@@ -962,6 +990,17 @@ namespace weyl
         }
 
         // Square matrix operations
+
+        static constexpr tensor_t identity()
+        {
+            return tensor_t(tensor<T, 2>(1));
+        }
+
+        /// \brief Directly set the diagonal
+        void set_diag(const tensor<T, 2>& diag) {
+            _data[0][0] = diag[0];
+            _data[1][1] = diag[1];
+        }
 
         /// \brief Get the determinant of the matrix
         T det() const {
