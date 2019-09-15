@@ -675,11 +675,19 @@ namespace weyl
         tensor<T, Rows-1, Cols-1> minor() const {
             tensor<T, Rows-1, Cols-1> m;
             for (size_t i = 0; i < I; ++i)
-            for (size_t j = 0; j < J; ++j)
-                m[i][j] = _data[i][j];
+            {
+                for (size_t j = 0; j < J; ++j)
+                    m[i][j] = _data[i][j];
+                for (size_t j = J+1; j < Cols; ++j)
+                    m[i][j-1] = _data[i][j];
+            }
             for (size_t i = I+1; i < Rows; ++i)
-            for (size_t j = J+1; j < Cols; ++j)
-                m[i-1][j-1] = _data[i][j];
+            {
+                for (size_t j = 0; j < J; ++j)
+                    m[i-1][j] = _data[i][j];
+                for (size_t j = J+1; j < Cols; ++j)
+                    m[i-1][j-1] = _data[i][j];
+            }
             return m;
         }
 
@@ -939,15 +947,8 @@ namespace weyl
 
         /// \brief Return the minor matrix (with col I and row J removed)
         template<size_t I, size_t J>
-        tensor<T, Rows-1, Cols-1> minor() const {
-            tensor<T, Rows-1, Cols-1> m;
-            for (size_t i = 0; i < I; ++i)
-            for (size_t j = 0; j < J; ++j)
-                m[i][j] = _data[i][j];
-            for (size_t i = I+1; i < Rows; ++i)
-            for (size_t j = J+1; j < Cols; ++j)
-                m[i-1][j-1] = _data[i][j];
-            return m;
+        T minor() const {
+            return _data[1-I][1-J];
         }
 
         /// \brief Return a vector containing concatenated rows
@@ -1173,6 +1174,7 @@ namespace weyl
         data_t _data;
     };
 
+    /*
     template <typename T>
     class tensor<T, 4>
     {
@@ -1737,6 +1739,7 @@ namespace weyl
         T x;
         T y;
     };
+    */
 }
 
 #endif

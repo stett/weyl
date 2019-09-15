@@ -37,6 +37,7 @@ TEST_CASE("Vector magnitude", "[vector]") {
     REQUIRE(v.magnitude() == std::sqrt(5.0f));
 }
 
+/*
 TEST_CASE("Vector member access", "[vector]") {
     vector<float, 2> v2(1.0f, 2.0f);
     vector<float, 3> v3(1.0f, 2.0f, 3.0f);
@@ -51,3 +52,4 @@ TEST_CASE("Vector member access", "[vector]") {
     REQUIRE(v4.z == 3.0f);
     REQUIRE(v4.w == 4.0f);
 }
+*/
