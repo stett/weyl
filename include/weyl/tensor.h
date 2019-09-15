@@ -1079,10 +1079,17 @@ namespace weyl
             std::copy(values.begin(), values.end(), _data);
         }
 
-        template <typename OtherT>
-        tensor(const tensor<OtherT, N>& other) {
-            for (size_t i = 0; i < N; ++i)
-                _data[i] = static_cast<T>(other[i]);
+        template <typename OtherT, size_t OtherN, typename... Args>
+        tensor(const tensor<OtherT, OtherN>& other, const Args&... args) {
+            static_assert(OtherN <= N, "");
+            size_t i = 0;
+
+            // Fill the first OtherN elements with the other vector's data
+            for (; i < OtherN; ++i)
+                operator[](i) = static_cast<T>(other[i]);
+
+            // Fill the remaining values with the remaining arguments
+            ([&](){ operator[](i++) = args; }(), ...);
         }
 
         template <typename... Args>
@@ -1249,12 +1256,14 @@ namespace weyl
             w = *(it++);
         }
 
-        template <typename OtherT>
-        tensor(const tensor<OtherT, N>& other) :
-            x(static_cast<T>(other[0])),
-            y(static_cast<T>(other[1])),
-            z(static_cast<T>(other[2])),
-            w(static_cast<T>(other[3])) {}
+        template <typename OtherT, size_t OtherN, typename... Args>
+        tensor(const tensor<OtherT, OtherN>& other, const Args&... args) {
+            static_assert(OtherN <= N, "");
+            size_t i = 0;
+            for (; i < OtherN; ++i)
+                operator[](i) = static_cast<T>(other[i]);
+            ([&](){ operator[](i++) = args; }(), ...);
+        }
 
         T& operator[](size_t i) {
             switch (i)
@@ -1453,12 +1462,14 @@ namespace weyl
             z = *(it++);
         }
 
-        template <typename OtherT>
-        tensor(const tensor<OtherT, N>& other) :
-            x(static_cast<T>(other[0])),
-            y(static_cast<T>(other[1])),
-            z(static_cast<T>(other[2]))
-        {}
+        template <typename OtherT, size_t OtherN, typename... Args>
+        tensor(const tensor<OtherT, OtherN>& other, const Args&... args) {
+            static_assert(OtherN <= N, "");
+            size_t i = 0;
+            for (; i < OtherN; ++i)
+                operator[](i) = static_cast<T>(other[i]);
+            ([&](){ operator[](i++) = args; }(), ...);
+        }
 
         T& operator[](size_t i) {
             switch (i)
@@ -1638,11 +1649,14 @@ namespace weyl
             y = *(it++);
         }
 
-        template <typename OtherT>
-        tensor(const tensor<OtherT, N>& other) :
-            x(static_cast<T>(other[0])),
-            y(static_cast<T>(other[1]))
-        {}
+        template <typename OtherT, size_t OtherN, typename... Args>
+        tensor(const tensor<OtherT, OtherN>& other, const Args&... args) {
+            static_assert(OtherN <= N, "");
+            size_t i = 0;
+            for (; i < OtherN; ++i)
+                operator[](i) = static_cast<T>(other[i]);
+            ([&](){ operator[](i++) = args; }(), ...);
+        }
 
         T& operator[](size_t i) {
             return i == 0 ? x : y;

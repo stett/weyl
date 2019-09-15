@@ -51,3 +51,14 @@ TEST_CASE("Vector member access", "[vector]") {
     REQUIRE(v4.z == 3.0f);
     REQUIRE(v4.w == 4.0f);
 }
+
+TEST_CASE("Vector/subvector initialization", "[vector]") {
+    vector<float, 2> v2(1.f, 2.f);
+    vector<float, 3> v3(v2, 3.f);
+    vector<float, 5> v5(v3, 4.f, 5.f);
+    REQUIRE(v5[0] == 1.f);
+    REQUIRE(v5[1] == 2.f);
+    REQUIRE(v5[2] == 3.f);
+    REQUIRE(v5[3] == 4.f);
+    REQUIRE(v5[4] == 5.f);
+}
