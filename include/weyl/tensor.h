@@ -1089,7 +1089,7 @@ namespace weyl
                 operator[](i) = static_cast<T>(other[i]);
 
             // Fill the remaining values with the remaining arguments
-            ([&](){ operator[](i++) = args; }(), ...);
+            ([&](){ operator[](i++) = static_cast<T>(args); }(), ...);
         }
 
         template <typename... Args>
@@ -1262,7 +1262,7 @@ namespace weyl
             size_t i = 0;
             for (; i < OtherN; ++i)
                 operator[](i) = static_cast<T>(other[i]);
-            ([&](){ operator[](i++) = args; }(), ...);
+            ([&](){ operator[](i++) = static_cast<T>(args); }(), ...);
         }
 
         T& operator[](size_t i) {
@@ -1468,7 +1468,7 @@ namespace weyl
             size_t i = 0;
             for (; i < OtherN; ++i)
                 operator[](i) = static_cast<T>(other[i]);
-            ([&](){ operator[](i++) = args; }(), ...);
+            ([&](){ operator[](i++) = static_cast<T>(args); }(), ...);
         }
 
         T& operator[](size_t i) {
@@ -1655,7 +1655,7 @@ namespace weyl
             size_t i = 0;
             for (; i < OtherN; ++i)
                 operator[](i) = static_cast<T>(other[i]);
-            ([&](){ operator[](i++) = args; }(), ...);
+            ([&](){ operator[](i++) = static_cast<T>(args); }(), ...);
         }
 
         T& operator[](size_t i) {
