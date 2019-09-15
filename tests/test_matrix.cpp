@@ -86,11 +86,8 @@ TEST_CASE("3x3 Matrix operations", "[Matrix]") {
         REQUIRE((A.minor<0, 2>() == A_minor_02));
     }
 
-    /*
     SECTION("Determinant, 3x3") {
-        float A_det_expected = 8.0f;
-        float A_det = A.det();
-        REQUIRE(A_det_expected == A_det);
+        REQUIRE(A.det() == 8.0f);
     }
 
     SECTION("Transpose, 3x3") {
@@ -117,6 +114,7 @@ TEST_CASE("3x3 Matrix operations", "[Matrix]") {
         REQUIRE(A_adjugate == A_adjugate_expected);
     }
 
+    /*
     SECTION("Inverse, 3x3") {
         mat<3, 3> A_inverse_expected({
             { -1.0f/8.0f, 1.0f/4.0f, -1.0f/8.0f },
@@ -126,8 +124,8 @@ TEST_CASE("3x3 Matrix operations", "[Matrix]") {
         mat<3, 3> A_inverse_A = A.inverse() * A;
         mat<3, 3> A_A_inverse = A * A.inverse();
         REQUIRE(A_inverse == A_inverse_expected);
-        REQUIRE((A_inverse_A == mat<3, 3>()));
-        REQUIRE((A_A_inverse == mat<3, 3>()));
+        REQUIRE((A_inverse_A == mat<3, 3>::identity));
+        REQUIRE((A_A_inverse == mat<3, 3>::identity));
     }
 
     SECTION("Columns, 3x3") {

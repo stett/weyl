@@ -207,7 +207,7 @@ namespace weyl
 
             static inline void vertical(const matrix<T, Size, Size>& src, matrix<T, Size, Size>& dst) {
                 MatrixMap<T, ElementT, Size, i, j-1>::vertical(src, dst);
-                typename ElementT<T, Size, i, j>::compute(src, dst);
+                ElementT<T, Size, i, j>::compute(src, dst);
             }
         };
 
@@ -215,7 +215,7 @@ namespace weyl
         struct MatrixMap<T, ElementT, Size, i, 0>
         {
             static inline void vertical(const matrix<T, Size, Size>& src, matrix<T, Size, Size>& dst) {
-                typename ElementT<T, Size, i, 0>::compute(src, dst);
+                ElementT<T, Size, i, 0>::compute(src, dst);
             }
         };
 
@@ -228,7 +228,7 @@ namespace weyl
 
             static inline void vertical(const matrix<T, Size, Size>& src, matrix<T, Size, Size>& dst) {
                 MatrixMap<T, ElementT, Size, 0, j-1>::vertical(src, dst);
-                typename ElementT<T, Size, 0, j>::compute(src, dst);
+                ElementT<T, Size, 0, j>::compute(src, dst);
             }
         };
 
@@ -236,7 +236,7 @@ namespace weyl
         struct MatrixMap<T, ElementT, Size, 0, 0>
         {
             static inline void vertical(const matrix<T, Size, Size>& src, matrix<T, Size, Size>& dst) {
-                typename ElementT<T, Size, 0, 0>::compute(src, dst);
+                ElementT<T, Size, 0, 0>::compute(src, dst);
             }
         };
     }
