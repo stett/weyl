@@ -1213,7 +1213,6 @@ namespace weyl
         data_t _data;
     };
 
-    /*
     template <typename T>
     class tensor<T, 4>
     {
@@ -1778,7 +1777,6 @@ namespace weyl
         T x;
         T y;
     };
-    */
 }
 
 #endif
