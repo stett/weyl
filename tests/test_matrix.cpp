@@ -2,6 +2,8 @@
 #include "weyl.h"
 using namespace weyl;
 
+#include <iostream>
+
 TEST_CASE("Matrix product (square)", "[matrix]") {
 
     matrix<float, 3, 3> m1({

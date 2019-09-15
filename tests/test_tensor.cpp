@@ -144,6 +144,7 @@ TEST_CASE("Scalar * tensor product", "[tensor]") {
     REQUIRE(t3 == t2);
 }
 
+/*
 TEST_CASE("Tensor * tensor component in-place product", "[tensor]") {
     tensor<float, 2, 3> t1({ { 1.0f, 2.0f, 3.0f }, { 4.0f, 5.0f, 6.0f } });
     tensor<float, 2, 3> t2({ { 2.0f, 4.0f, 6.0f }, { 8.0f, 10.0f, 12.0f } });
@@ -159,6 +160,7 @@ TEST_CASE("Tensor * tensor component product", "[tensor]") {
     tensor<float, 2, 3> t4 = t1 * t2;
     REQUIRE(t4 == t3);
 }
+*/
 
 TEST_CASE("Tensor + tensor in-place addition", "[tensor]") {
     tensor<float, 2, 3> t1({ { 1.0f, 2.0f, 3.0f }, { 4.0f, 5.0f, 6.0f } });
@@ -194,7 +196,10 @@ TEST_CASE("Tensor - tensor subtraction", "[tensor]") {
 
 TEST_CASE("Tensor convolution type internals", "[tensor]") {
     //                              [tensor 1's rank]--v  v--[tensor 1's index]
-    using ConvolvedT = weyl::detail::TensorConvolution<3, 1, 1, float, /* tensor 1 */ 1, 2, 3, /* tensor 2 */ 4, 2, 5>::tensor_t;
+    using ConvolvedT = weyl::detail::TensorConvolution<
+        3, 1, 1, float, // tensor 1
+        1, 2, 3, // tensor 2
+        4, 2, 5>::tensor_t;
     //                                   [tensor 2's index]--^
     REQUIRE(ConvolvedT::rank::value == 4);
     REQUIRE(ConvolvedT::dimension<0>::value == 1);

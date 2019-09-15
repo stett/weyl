@@ -2,8 +2,7 @@
 #ifndef _WEYL_QUATERNION_H_
 #define _WEYL_QUATERNION_H_
 
-#include "weyl/vector.h"
-#include "weyl/matrix.h"
+#include "weyl/tensor.h"
 
 namespace weyl
 {

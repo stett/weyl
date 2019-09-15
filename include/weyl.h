@@ -11,8 +11,6 @@
 #endif
 
 #include "weyl/tensor.h"
-#include "weyl/vector.h"
-#include "weyl/matrix.h"
 #include "weyl/quaternion.h"
 
 namespace weyl
