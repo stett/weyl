@@ -704,7 +704,7 @@ namespace weyl
         // Square matrix operations
 
         /// \brief Get the determinant of the matrix
-        template <size_t Size>
+        template <size_t Size=Rows>
         typename std::enable_if<Size == Rows && Size == Cols, T>::type
         det() const {
             T result = static_cast<T>(0);
@@ -718,7 +718,7 @@ namespace weyl
             return result;
         }
 
-        template <size_t Size>
+        template <size_t Size=Rows>
         typename std::enable_if<Size == Rows && Size == Cols, matrix<T, Size, Size>>::type
         minors() const {
             matrix<T, Size, Size> result;
@@ -726,7 +726,7 @@ namespace weyl
             return result;
         }
 
-        template <size_t Size>
+        template <size_t Size=Rows>
         typename std::enable_if<Size == Rows && Size == Cols, matrix<T, Size, Size>>::type
         cofactor() const {
             matrix<T, Size, Size> result;
@@ -734,14 +734,14 @@ namespace weyl
             return result;
         }
 
-        template <size_t Size>
+        template <size_t Size=Rows>
         typename std::enable_if<Size == Rows && Size == Cols, matrix<T, Size, Size>>::type
         adj() const {
             return cofactor().transpose();
         }
 
         /// \brief Return the inverse of the matrix.
-        template <size_t Size>
+        template <size_t Size=Rows>
         typename std::enable_if<Size == Rows && Size == Cols, matrix<T, Size, Size>>::type
         inverse() const {
             matrix<T, Size, Size> result(static_cast<T>(1));

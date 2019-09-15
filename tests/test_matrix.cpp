@@ -58,3 +58,16 @@ TEST_CASE("Matrix column extraction", "[matrix]") {
     REQUIRE((m.col(1) == vector<float, 3>(2.0f, 5.0f, 8.0f)));
     REQUIRE((m.col(2) == vector<float, 3>(3.0f, 6.0f, 9.0f)));
 }
+
+TEST_CASE("Matrix inverse", "[matrix]") {
+    matrix<float, 2, 2> m({
+        {1, 2},
+        {3, 4},
+    });
+    matrix<float, 2, 2> m_inv = m.inverse();
+    matrix<float, 2, 2> m_inv_expected({
+        {-2, 1},
+        {3.f/2.f, -.5f},
+    });
+    REQUIRE(m_inv == m_inv_expected);
+}
